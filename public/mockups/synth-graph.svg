@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#070A10"/>
+  <path d="M150 154L1032 154" stroke="#17202C" stroke-width="2"/>
+  <path d="M150 360L1032 360" stroke="#17202C" stroke-width="2"/>
+  <path d="M150 566L1032 566" stroke="#17202C" stroke-width="2"/>
+  <path d="M232 198L486 320L666 208L910 394" stroke="#A3B2FF" stroke-width="6"/>
+  <path d="M232 522L486 320L666 470L910 394" stroke="#6EF9FF" stroke-width="6"/>
+  <circle cx="232" cy="198" r="20" fill="#6EF9FF"/>
+  <circle cx="232" cy="522" r="20" fill="#FF75EC"/>
+  <circle cx="486" cy="320" r="24" fill="#A3B2FF"/>
+  <circle cx="666" cy="208" r="18" fill="#FF75EC"/>
+  <circle cx="666" cy="470" r="18" fill="#6EF9FF"/>
+  <circle cx="910" cy="394" r="24" fill="#F4FBFF"/>
+  <text x="150" y="96" fill="#F4FBFF" font-family="IBM Plex Mono, monospace" font-size="30" letter-spacing="6">GRAPH / KNOWLEDGE FLOW</text>
+</svg>

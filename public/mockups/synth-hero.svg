@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#080B11"/>
+  <rect width="1200" height="720" fill="url(#a)" opacity=".28"/>
+  <rect x="80" y="86" width="1040" height="548" rx="34" fill="#0C1118" stroke="#263141"/>
+  <circle cx="362" cy="308" r="22" fill="#6EF9FF"/>
+  <circle cx="512" cy="214" r="18" fill="#A3B2FF"/>
+  <circle cx="638" cy="324" r="24" fill="#FF75EC"/>
+  <circle cx="792" cy="236" r="18" fill="#6EF9FF"/>
+  <circle cx="898" cy="360" r="20" fill="#A3B2FF"/>
+  <path d="M362 308L512 214L638 324L792 236L898 360" stroke="#D8EDFF" stroke-width="6"/>
+  <rect x="128" y="474" width="430" height="98" rx="24" fill="#101721" stroke="#243141"/>
+  <rect x="588" y="474" width="484" height="98" rx="24" fill="#101721" stroke="#243141"/>
+  <text x="128" y="176" fill="#F4FBFF" font-family="IBM Plex Mono, monospace" font-size="30" letter-spacing="6">SYNTH / SYSTEM OVERVIEW</text>
+  <defs>
+    <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="translate(790 174) rotate(135.681) scale(574.378 287.201)">
+      <stop stop-color="#FF75EC"/>
+      <stop offset="1" stop-color="#FF75EC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

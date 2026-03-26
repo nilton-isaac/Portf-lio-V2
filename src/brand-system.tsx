@@ -24,7 +24,7 @@ type SharedProps = {
 }
 
 const monoFont = "'IBM Plex Mono', monospace"
-const displayFont = "'Sora', sans-serif"
+const displayFont = "'Manrope', sans-serif"
 const synthAssetFallback = '/synth-logo-original.svg'
 
 function BrandCanvas({

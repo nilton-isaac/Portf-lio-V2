@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#091014"/>
+  <rect x="72" y="72" width="480" height="254" rx="28" fill="#0F171C" stroke="#20323B"/>
+  <rect x="584" y="72" width="544" height="254" rx="28" fill="#0F171C" stroke="#20323B"/>
+  <rect x="72" y="358" width="1056" height="290" rx="28" fill="#0F171C" stroke="#20323B"/>
+  <path d="M112 268L208 194L306 230L402 150L512 188" stroke="#98F7FF" stroke-width="8" stroke-linecap="round"/>
+  <rect x="626" y="128" width="54" height="146" rx="14" fill="#11303A"/>
+  <rect x="710" y="168" width="54" height="106" rx="14" fill="#143743"/>
+  <rect x="794" y="108" width="54" height="166" rx="14" fill="#183F4C"/>
+  <rect x="878" y="138" width="54" height="136" rx="14" fill="#1A4553"/>
+  <rect x="962" y="198" width="54" height="76" rx="14" fill="#204E5F"/>
+  <path d="M124 578H1072" stroke="#20323C" stroke-width="2"/>
+  <path d="M164 536L314 480L426 512L610 430L792 448L936 386L1012 410" stroke="#EFFF8F" stroke-width="8" stroke-linecap="round"/>
+  <text x="100" y="124" fill="#EDF6FA" font-family="IBM Plex Mono, monospace" font-size="28" letter-spacing="5">SYSTEM METRICS</text>
+</svg>

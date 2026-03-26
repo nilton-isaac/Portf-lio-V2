@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#080d10"/>
+  <path d="M120 170H1080" stroke="#20323C" stroke-width="2"/>
+  <path d="M120 360H1080" stroke="#20323C" stroke-width="2"/>
+  <path d="M120 550H1080" stroke="#20323C" stroke-width="2"/>
+  <rect x="146" y="132" width="210" height="76" rx="22" fill="#132830" stroke="#8EF6FF"/>
+  <rect x="394" y="322" width="256" height="76" rx="22" fill="#153240" stroke="#8EF6FF"/>
+  <rect x="702" y="512" width="212" height="76" rx="22" fill="#183A47" stroke="#EFFF8F"/>
+  <circle cx="146" cy="170" r="12" fill="#98F7FF"/>
+  <circle cx="394" cy="360" r="12" fill="#98F7FF"/>
+  <circle cx="702" cy="550" r="12" fill="#EFFF8F"/>
+  <path d="M158 170H394V360H702V550H914" stroke="#98F7FF" stroke-width="4"/>
+  <text x="120" y="90" fill="#EDF6FA" font-family="IBM Plex Mono, monospace" font-size="30" letter-spacing="6">QUEUE / HANDOFF / PROGRESS</text>
+</svg>

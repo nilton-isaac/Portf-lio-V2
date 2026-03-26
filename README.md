@@ -1,73 +1,79 @@
-# React + TypeScript + Vite
+# Portfolio V2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio em React + TypeScript + Vite com direcao visual escura, background reativo por projeto, painel expandido inline e assets locais prontos para deploy.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS 4
+- anime.js
 
-## React Compiler
+## Estrutura
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `src/App.tsx`: composicao principal da landing e geracao do background dinamico.
+- `src/site-data.ts`: camada de dados dos projetos, copy temporario e configuracao visual.
+- `src/components/project-dossier.tsx`: visualizacao expandida de cada projeto.
+- `src/brand-system.tsx`: logos vetoriais e uso do PNG real do Synth.
+- `public/mockups/`: mockups SVG locais usados como placeholder.
+- `public/synth-logo-original.png`: asset real do Synth WireNotion.
 
-## Expanding the ESLint configuration
+## Desenvolvimento
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Servidor local padrao:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `http://localhost:5173`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Qualidade
+
+Executar antes de subir:
+
+```bash
+npm run lint
+npm run build
 ```
+
+## Deploy na Vercel
+
+Este projeto esta preparado como site estatico Vite.
+
+### Via dashboard
+
+1. Crie um repositorio com este projeto.
+2. Importe o repositorio na [Vercel](https://vercel.com/).
+3. A Vercel deve detectar `Vite` automaticamente.
+4. Confirme os valores:
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+5. Publique.
+
+### Via CLI
+
+```bash
+npm i -g vercel
+vercel
+```
+
+Para previews:
+
+```bash
+vercel deploy
+```
+
+## Conteudo temporario
+
+- Os textos em `src/site-data.ts` estao como placeholder e podem ser trocados pelos textos finais.
+- Os mockups em `public/mockups/` sao locais e podem ser substituidos por capturas reais dos projetos.
+- O Synth ja usa o PNG real recebido do usuario.
+
+## Responsividade
+
+- Hero com reorganizacao em coluna unica no mobile.
+- Lista de projetos com dossier expandido inline sem depender de sticky.
+- Superficies de leitura mais solidas para manter contraste com o background.

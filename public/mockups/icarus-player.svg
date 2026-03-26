@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#0E0714"/>
+  <rect x="88" y="120" width="1024" height="480" rx="34" fill="#110B18" stroke="#301D40"/>
+  <circle cx="238" cy="360" r="118" fill="#1B1026" stroke="#CF79FF"/>
+  <path d="M214 314L292 360L214 406V314Z" fill="#FFF9FF"/>
+  <path d="M424 310C490 274 552 446 620 402C688 358 760 278 834 332C908 386 946 428 1024 378" stroke="#CF79FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M424 414C486 386 548 468 622 444C696 420 758 354 824 386C890 418 954 452 1024 426" stroke="#FF63D5" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+  <text x="424" y="218" fill="#FFF9FF" font-family="IBM Plex Mono, monospace" font-size="32" letter-spacing="6">PLAYER / RHYTHM / LESSON</text>
+</svg>

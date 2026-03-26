@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#070A0C"/>
+  <rect x="74" y="74" width="1052" height="572" rx="28" fill="#0B0F12" stroke="#273239"/>
+  <circle cx="130" cy="124" r="10" fill="#6EF9FF"/>
+  <circle cx="164" cy="124" r="10" fill="#A3B2FF"/>
+  <circle cx="198" cy="124" r="10" fill="#FF75EC"/>
+  <path d="M126 204H502" stroke="#5A666E" stroke-width="16" stroke-linecap="round"/>
+  <path d="M126 256H700" stroke="#2B3941" stroke-width="16" stroke-linecap="round"/>
+  <path d="M126 308H594" stroke="#5A666E" stroke-width="16" stroke-linecap="round"/>
+  <path d="M126 392H424" stroke="#98F7FF" stroke-width="16" stroke-linecap="round"/>
+  <path d="M126 444H768" stroke="#2B3941" stroke-width="16" stroke-linecap="round"/>
+  <path d="M126 496H544" stroke="#CF79FF" stroke-width="16" stroke-linecap="round"/>
+  <text x="126" y="580" fill="#ECF1F3" font-family="IBM Plex Mono, monospace" font-size="28" letter-spacing="6">PLACEHOLDER TERMINAL / INTERNAL VIEW</text>
+</svg>

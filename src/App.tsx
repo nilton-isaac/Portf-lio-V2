@@ -6,41 +6,19 @@ import {
   type CSSProperties,
 } from 'react'
 import { animate, createTimeline, stagger } from 'animejs'
+import { BrandMark, BrandPoster } from './brand-system'
+import { ProjectCaseView } from './components/project-case-view'
 import {
-  BrandMark,
-  BrandPoster,
-  type BrandLogoKind,
-  type BrandPalette,
-} from './brand-system'
-
-type PatternEmphasis = 'orthogonal' | 'orbital' | 'diagonal'
-
-type Palette = BrandPalette & {
-  accentSoft: string
-  washLeft: string
-  washCenter: string
-  washRight: string
-  dot: string
-  tileStrong: string
-  tileSoft: string
-  tileOutline: string
-  panelGlow: string
-  previewTint: string
-}
-
-type BackgroundPattern = {
-  seed: number
-  density: number
-  clusterCount: number
-  clusterRadius: number
-  strongCutoff: number
-  softCutoff: number
-  flow: number
-  jitter: number
-  voidStrength: number
-  emphasis: PatternEmphasis
-  angle?: number
-}
+  contactLinks,
+  disciplines,
+  manifestations,
+  navigation,
+  rituals,
+  siteCopy,
+  type BackgroundPattern,
+  type Manifestation,
+  type Palette,
+} from './site-data'
 
 type BackgroundTile = {
   level: 0 | 1 | 2
@@ -50,224 +28,53 @@ type BackgroundTile = {
 type ViewportField = {
   columns: number
   rows: number
-  gap: number
 }
 
-type Manifestation = {
-  id: string
-  index: string
-  label: string
-  title: string
-  posterTitle: string
-  posterSubtitle: string
-  subtitle: string
-  summary: string
-  detail: string
-  stack: string[]
-  cue: string
-  logoMode: 'vector' | 'image'
-  logoKind: BrandLogoKind
-  logoAsset?: string
-  palette: Palette
-  backgroundPattern: BackgroundPattern
+function getProjectFromLocation() {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  const params = new URLSearchParams(window.location.search)
+  const projectId = params.get('project')
+
+  return manifestations.some((manifestation) => manifestation.id === projectId)
+    ? projectId
+    : null
 }
 
-const synthAsset = '/synth-logo-original.png'
+function syncProjectUrl(
+  projectId: string | null,
+  options?: {
+    replace?: boolean
+    hash?: string
+  },
+) {
+  if (typeof window === 'undefined') {
+    return
+  }
 
-const navigation = [
-  { label: '01. GRIMOIRE', href: '#manifesto' },
-  { label: '02. MANIFESTOS', href: '#manifestacoes' },
-  { label: '03. RITO', href: '#processo' },
-  { label: '04. CANAL', href: '#contato' },
-]
+  const url = new URL(window.location.href)
 
-const disciplines = [
-  {
-    title: 'UI',
-    items: ['React / TypeScript', 'Motion + branding', 'Contrast / readability'],
-  },
-  {
-    title: 'Systems',
-    items: ['Node / APIs', 'Modelagem limpa', 'Fluxos reais'],
-  },
-  {
-    title: 'Delivery',
-    items: ['Deploy simples', 'Checks uteis', 'Codigo pronto para time'],
-  },
-]
+  if (projectId) {
+    url.searchParams.set('project', projectId)
+  } else {
+    url.searchParams.delete('project')
+  }
 
-const manifestations: Manifestation[] = [
-  {
-    id: 'kanban-nine',
-    index: 'I',
-    label: 'workflow system',
-    title: 'Kanban Nine',
-    posterTitle: 'KANBAN_NINE',
-    posterSubtitle: 'ops / flow / systems',
-    subtitle: 'Board-driven ops com glow tecnico e leitura imediata.',
-    summary: 'Workspace para squad, prioridade e fluxo sem ruido.',
-    detail: 'Hover puxa o arquivo para um ciano tecnico com circuitos e brilho terminal.',
-    stack: ['React', 'State', 'Ops UI'],
-    cue: 'cyan / circuitry / terminal',
-    logoMode: 'vector',
-    logoKind: 'kanban-nine',
-    palette: {
-      primary: '#98f7ff',
-      secondary: '#efff8f',
-      tertiary: '#ff8fd9',
-      text: '#ecfeff',
-      glow: 'rgba(152, 247, 255, 0.24)',
-      accentSoft: 'rgba(152, 247, 255, 0.16)',
-      washLeft: 'rgba(18, 78, 92, 0.24)',
-      washCenter: 'rgba(6, 12, 16, 0.84)',
-      washRight: 'rgba(160, 255, 250, 0.08)',
-      dot: 'rgba(152, 247, 255, 0.12)',
-      tileStrong: 'rgba(152, 247, 255, 0.82)',
-      tileSoft: 'rgba(152, 247, 255, 0.36)',
-      tileOutline: 'rgba(152, 247, 255, 0.2)',
-      panelGlow: 'rgba(152, 247, 255, 0.22)',
-      previewTint: 'rgba(152, 247, 255, 0.18)',
-    },
-    backgroundPattern: {
-      seed: 11,
-      density: 0.34,
-      clusterCount: 8,
-      clusterRadius: 0.2,
-      strongCutoff: 0.78,
-      softCutoff: 0.53,
-      flow: 1.32,
-      jitter: 1.28,
-      voidStrength: 0.32,
-      emphasis: 'orthogonal',
-    },
-  },
-  {
-    id: 'icarus-type',
-    index: 'II',
-    label: 'language product',
-    title: 'Icarus Type',
-    posterTitle: 'Icarus',
-    posterSubtitle: 'Type',
-    subtitle: 'Eye sigil, purple wash e leitura mais editorial.',
-    summary: 'Produto de ingles com musica, ritmo e identidade forte.',
-    detail: 'Hover troca o site para um roxo neon com simbolo ritual e wordmark mais limpo.',
-    stack: ['Next.js', 'Content', 'UX copy'],
-    cue: 'violet / sigil / editorial',
-    logoMode: 'vector',
-    logoKind: 'icarus-type',
-    palette: {
-      primary: '#f7ecff',
-      secondary: '#cf79ff',
-      tertiary: '#ff63d5',
-      text: '#fff9ff',
-      glow: 'rgba(207, 121, 255, 0.24)',
-      accentSoft: 'rgba(207, 121, 255, 0.16)',
-      washLeft: 'rgba(67, 20, 96, 0.26)',
-      washCenter: 'rgba(12, 7, 18, 0.84)',
-      washRight: 'rgba(255, 99, 213, 0.08)',
-      dot: 'rgba(207, 121, 255, 0.12)',
-      tileStrong: 'rgba(207, 121, 255, 0.82)',
-      tileSoft: 'rgba(207, 121, 255, 0.34)',
-      tileOutline: 'rgba(255, 99, 213, 0.22)',
-      panelGlow: 'rgba(207, 121, 255, 0.22)',
-      previewTint: 'rgba(255, 99, 213, 0.18)',
-    },
-    backgroundPattern: {
-      seed: 23,
-      density: 0.31,
-      clusterCount: 9,
-      clusterRadius: 0.18,
-      strongCutoff: 0.79,
-      softCutoff: 0.55,
-      flow: 1.14,
-      jitter: 1.44,
-      voidStrength: 0.28,
-      emphasis: 'orbital',
-    },
-  },
-  {
-    id: 'synth-wirenotion',
-    index: 'III',
-    label: 'note system',
-    title: 'Synth WireNotion',
-    posterTitle: 'SYNTH',
-    posterSubtitle: 'WIRENOTION',
-    subtitle: 'Logo original do Synth com campo cromatico e ambiente reativo.',
-    summary: 'Ferramenta de notas visuais com identidade glass, glow real e fundo modular.',
-    detail: 'Hover leva o ambiente para ciano-violeta com a arte original do Synth e matriz mais densa.',
-    stack: ['Visual graph', 'Notes', 'Brand UI'],
-    cue: 'teal / violet / glass',
-    logoMode: 'image',
-    logoKind: 'synth-wirenotion',
-    logoAsset: synthAsset,
-    palette: {
-      primary: '#6ef9ff',
-      secondary: '#a3b2ff',
-      tertiary: '#ff75ec',
-      text: '#f3fbff',
-      glow: 'rgba(110, 249, 255, 0.24)',
-      accentSoft: 'rgba(110, 249, 255, 0.16)',
-      washLeft: 'rgba(15, 72, 88, 0.24)',
-      washCenter: 'rgba(6, 9, 22, 0.84)',
-      washRight: 'rgba(255, 117, 236, 0.1)',
-      dot: 'rgba(110, 249, 255, 0.12)',
-      tileStrong: 'rgba(110, 249, 255, 0.82)',
-      tileSoft: 'rgba(163, 178, 255, 0.36)',
-      tileOutline: 'rgba(255, 117, 236, 0.2)',
-      panelGlow: 'rgba(110, 249, 255, 0.22)',
-      previewTint: 'rgba(163, 178, 255, 0.18)',
-    },
-    backgroundPattern: {
-      seed: 37,
-      density: 0.39,
-      clusterCount: 11,
-      clusterRadius: 0.21,
-      strongCutoff: 0.76,
-      softCutoff: 0.51,
-      flow: 1.58,
-      jitter: 1.62,
-      voidStrength: 0.2,
-      emphasis: 'diagonal',
-      angle: 0.84,
-    },
-  },
-]
+  if (options?.hash !== undefined) {
+    url.hash = options.hash
+  }
 
-const rituals = [
-  {
-    step: '01',
-    title: 'Ler',
-    description: 'Comeco pelo contexto, nao pelo efeito.',
-  },
-  {
-    step: '02',
-    title: 'Estruturar',
-    description: 'Componente, contrato e fluxo antes do enfeite.',
-  },
-  {
-    step: '03',
-    title: 'Polir',
-    description: 'Motion, contraste e entrega pronta para time.',
-  },
-]
+  const next = `${url.pathname}${url.search}${url.hash}`
 
-const contactLinks = [
-  {
-    label: 'Email',
-    value: 'contato@seuportfolio.dev',
-    href: 'mailto:contato@seuportfolio.dev',
-  },
-  {
-    label: 'GitHub',
-    value: 'github.com/seunome',
-    href: 'https://github.com/seunome',
-  },
-  {
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/seunome',
-    href: 'https://www.linkedin.com/in/seunome/',
-  },
-]
+  if (options?.replace) {
+    window.history.replaceState({ projectId }, '', next)
+    return
+  }
+
+  window.history.pushState({ projectId }, '', next)
+}
 
 function fract(value: number) {
   return value - Math.floor(value)
@@ -282,13 +89,11 @@ function hashNoise(x: number, y: number, seed: number) {
 function getViewportField(width: number, height: number): ViewportField {
   const isMobile = width < 640
   const isTablet = width < 1024
-  const gap = isMobile ? 6 : isTablet ? 7 : 8
-  const step = isMobile ? 28 : isTablet ? 31 : 36
+  const step = isMobile ? 38 : isTablet ? 46 : 54
 
   return {
     columns: Math.max(14, Math.ceil(width / step)),
     rows: Math.max(16, Math.ceil(height / step)),
-    gap,
   }
 }
 
@@ -391,13 +196,22 @@ function createBackgroundPattern(
     const voidDistance = Math.hypot(nx - voidX, ny - voidY)
     const voidMask =
       1 - Math.max(0, 1 - voidDistance / 0.24) * pattern.voidStrength
+    const edgeDistance = Math.min(nx, 1 - nx, ny, 1 - ny)
+    const edgeBias =
+      0.26 +
+      Math.pow(1 - Math.min(1, edgeDistance / 0.26), 1.72) * 0.92
+    const centerDistance = Math.hypot(nx - 0.5, ny - 0.46)
+    const centerSuppression =
+      0.34 + Math.min(1, Math.max(0, (centerDistance - 0.06) / 0.42)) * 0.66
     const score =
       (cluster * 0.52 +
         layered * 0.16 +
         emphasis * 0.22 +
         grain * pattern.density +
         micro * 0.08) *
-      voidMask
+      voidMask *
+      edgeBias *
+      centerSuppression
 
     const level: 0 | 1 | 2 =
       score >= pattern.strongCutoff
@@ -417,9 +231,9 @@ function createAmbientPatternDataUrl(
   columns: number,
   rows: number,
 ) {
-  const cell = 14
-  const gap = 8
-  const radius = 1.2
+  const cell = 8
+  const gap = 14
+  const radius = 0.9
   const width = columns * cell + Math.max(0, columns - 1) * gap
   const height = rows * cell + Math.max(0, rows - 1) * gap
   const fills = [palette.primary, palette.secondary, palette.tertiary]
@@ -433,8 +247,8 @@ function createAmbientPatternDataUrl(
       const x = (index % columns) * (cell + gap)
       const y = Math.floor(index / columns) * (cell + gap)
       const fill = fills[tile.tone]
-      const opacity = tile.level === 2 ? '0.94' : '0.38'
-      const strokeOpacity = tile.level === 2 ? '0.18' : '0.1'
+      const opacity = tile.level === 2 ? '0.52' : '0.14'
+      const strokeOpacity = tile.level === 2 ? '0.1' : '0.04'
 
       return `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="${radius}" fill="${fill}" fill-opacity="${opacity}" stroke="${fill}" stroke-opacity="${strokeOpacity}" />`
     })
@@ -445,63 +259,66 @@ function createAmbientPatternDataUrl(
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
 }
 
+function getThemeStyle(manifestation: Manifestation): CSSProperties {
+  return {
+    '--accent': manifestation.palette.primary,
+    '--accent-secondary': manifestation.palette.secondary,
+    '--accent-tertiary': manifestation.palette.tertiary,
+    '--accent-soft': manifestation.palette.accentSoft,
+    '--wash-left': manifestation.palette.washLeft,
+    '--wash-center': manifestation.palette.washCenter,
+    '--wash-right': manifestation.palette.washRight,
+    '--dot-color': manifestation.palette.dot,
+    '--tile-strong': manifestation.palette.tileStrong,
+    '--tile-soft': manifestation.palette.tileSoft,
+    '--tile-outline': manifestation.palette.tileOutline,
+    '--panel-glow': manifestation.palette.panelGlow,
+    '--preview-tint': manifestation.palette.previewTint,
+  } as CSSProperties
+}
+
 function App() {
+  const defaultManifestation = manifestations[0]
+  const initialProjectId = getProjectFromLocation()
   const [activeManifestationId, setActiveManifestationId] = useState(
-    manifestations[0].id,
+    initialProjectId ?? defaultManifestation.id,
+  )
+  const [projectViewId, setProjectViewId] = useState<string | null>(
+    initialProjectId,
   )
   const [viewportField, setViewportField] = useState<ViewportField>(() => {
     if (typeof window === 'undefined') {
-      return { columns: 28, rows: 18, gap: 8 }
+      return { columns: 22, rows: 18 }
     }
 
     return getViewportField(window.innerWidth, window.innerHeight)
   })
   const rootRef = useRef<HTMLDivElement>(null)
-  const previewRef = useRef<HTMLDivElement>(null)
 
   const activeManifestation =
     manifestations.find(
       (manifestation) => manifestation.id === activeManifestationId,
-    ) ?? manifestations[0]
+    ) ?? defaultManifestation
   const activeAsset =
     activeManifestation.logoMode === 'image'
       ? activeManifestation.logoAsset
       : undefined
-  const activePattern = useMemo(
-    () =>
-      createBackgroundPattern(
-        activeManifestation.backgroundPattern,
-        viewportField.columns,
-        viewportField.rows,
-      ),
-    [activeManifestation.backgroundPattern, viewportField.columns, viewportField.rows],
-  )
-  const ambientPatternImage = useMemo(
-    () =>
-      createAmbientPatternDataUrl(
-        activePattern,
-        activeManifestation.palette,
-        viewportField.columns,
-        viewportField.rows,
-      ),
-    [activeManifestation.palette, activePattern, viewportField.columns, viewportField.rows],
-  )
+  const ambientPatternImage = useMemo(() => {
+    const tiles = createBackgroundPattern(
+      activeManifestation.backgroundPattern,
+      viewportField.columns,
+      viewportField.rows,
+    )
 
-  const themeStyle: CSSProperties = {
-    '--accent': activeManifestation.palette.primary,
-    '--accent-secondary': activeManifestation.palette.secondary,
-    '--accent-tertiary': activeManifestation.palette.tertiary,
-    '--accent-soft': activeManifestation.palette.accentSoft,
-    '--wash-left': activeManifestation.palette.washLeft,
-    '--wash-center': activeManifestation.palette.washCenter,
-    '--wash-right': activeManifestation.palette.washRight,
-    '--dot-color': activeManifestation.palette.dot,
-    '--tile-strong': activeManifestation.palette.tileStrong,
-    '--tile-soft': activeManifestation.palette.tileSoft,
-    '--tile-outline': activeManifestation.palette.tileOutline,
-    '--panel-glow': activeManifestation.palette.panelGlow,
-    '--preview-tint': activeManifestation.palette.previewTint,
-  } as CSSProperties
+    return createAmbientPatternDataUrl(
+      tiles,
+      activeManifestation.palette,
+      viewportField.columns,
+      viewportField.rows,
+    )
+  }, [activeManifestation, viewportField.columns, viewportField.rows])
+
+  const themeStyle = getThemeStyle(activeManifestation)
   const ambientFieldStyle = {
     '--ambient-image': ambientPatternImage,
   } as CSSProperties
@@ -518,6 +335,28 @@ function App() {
       window.removeEventListener('resize', syncViewportField)
     }
   }, [])
+
+  useEffect(() => {
+    syncProjectUrl(projectViewId, { replace: true })
+
+    const handlePopState = () => {
+      const nextProjectId = getProjectFromLocation()
+
+      setProjectViewId(nextProjectId)
+
+      if (nextProjectId) {
+        setActiveManifestationId(nextProjectId)
+      } else {
+        setActiveManifestationId(defaultManifestation.id)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [defaultManifestation.id, projectViewId])
 
   useEffect(() => {
     const root = rootRef.current
@@ -545,49 +384,36 @@ function App() {
 
     const animations: Array<{ revert: () => unknown }> = []
     const heroNodes = root.querySelectorAll<HTMLElement>('[data-hero-item]')
-    const sigilLines = root.querySelectorAll<HTMLElement>('[data-sigil-line]')
     const orbitNodes = root.querySelectorAll<HTMLElement>('[data-orbit]')
 
     revealAll(heroNodes)
 
     const intro = createTimeline({
       defaults: {
-        duration: 860,
+        duration: 820,
         ease: 'outExpo',
       },
     })
 
-    intro
-      .add(heroNodes, {
-        opacity: { from: 0 },
-        y: { from: 28 },
-        filter: { from: 'blur(12px)' },
-        delay: stagger(80),
-      })
-      .add(
-        sigilLines,
-        {
-          opacity: { from: 0 },
-          scaleX: { from: 0 },
-          duration: 620,
-          delay: stagger(80),
-        },
-        120,
-      )
-
-    animations.push(intro)
-
-    const orbitAnimation = animate(orbitNodes, {
-      scale: 1.05,
-      opacity: 0.72,
-      duration: 3400,
-      ease: 'inOutSine',
-      delay: stagger(420),
-      alternate: true,
-      loop: true,
+    intro.add(heroNodes, {
+      opacity: { from: 0 },
+      y: { from: 24 },
+      filter: { from: 'blur(12px)' },
+      delay: stagger(70),
     })
 
-    animations.push(orbitAnimation)
+    animations.push(intro)
+    animations.push(
+      animate(orbitNodes, {
+        scale: 1.04,
+        opacity: 0.68,
+        duration: 3200,
+        ease: 'inOutSine',
+        delay: stagger(380),
+        alternate: true,
+        loop: true,
+      }),
+    )
 
     const revealedSections = new WeakSet<HTMLElement>()
     const revealSection = (section: HTMLElement) => {
@@ -609,9 +435,9 @@ function App() {
           opacity: 1,
           y: 0,
           filter: 'blur(0px)',
-          duration: 720,
+          duration: 680,
           ease: 'outExpo',
-          delay: stagger(70),
+          delay: stagger(60),
         }),
       )
     }
@@ -628,7 +454,7 @@ function App() {
         })
       },
       {
-        threshold: 0.15,
+        threshold: 0.14,
         rootMargin: '0px 0px -10% 0px',
       },
     )
@@ -664,44 +490,30 @@ function App() {
         node.dataset.animate = 'pending'
       })
     }
-  }, [])
+  }, [projectViewId])
 
-  useEffect(() => {
-    const shouldReduceMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
+  const handleActivate = (id: string) => {
+    setActiveManifestationId(id)
+  }
 
-    if (shouldReduceMotion) {
-      return
-    }
+  const openProjectView = (id: string) => {
+    setActiveManifestationId(id)
+    setProjectViewId(id)
+    syncProjectUrl(id, { hash: '' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
-    const previewItems = previewRef.current?.querySelectorAll<HTMLElement>(
-      '[data-preview-item]',
-    )
-    const animations: Array<{ revert: () => unknown }> = []
+  const closeProjectView = () => {
+    setProjectViewId(null)
+    syncProjectUrl(null, { hash: '#manifestacoes' })
 
-    if (previewItems?.length) {
-      animations.push(
-        animate(previewItems, {
-          opacity: { from: 0.36 },
-          y: { from: 18 },
-          filter: { from: 'blur(10px)' },
-          duration: 640,
-          ease: 'outExpo',
-          delay: stagger(60),
-        }),
-      )
-    }
-
-    return () => {
-      animations
-        .slice()
-        .reverse()
-        .forEach((animation) => {
-          animation.revert()
-        })
-    }
-  }, [activeManifestation.id])
+    requestAnimationFrame(() => {
+      document.getElementById('manifestacoes')?.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      })
+    })
+  }
 
   return (
     <div
@@ -722,237 +534,226 @@ function App() {
 
       <div
         data-orbit
-        className="pointer-events-none absolute left-[-6rem] top-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,var(--preview-tint),transparent_70%)] opacity-35 blur-3xl"
+        className="pointer-events-none absolute left-[-8rem] top-12 h-72 w-72 rounded-full bg-[radial-gradient(circle,var(--preview-tint),transparent_72%)] opacity-40 blur-3xl"
       />
       <div
         data-orbit
-        className="pointer-events-none absolute right-[-4rem] top-[26rem] h-80 w-80 rounded-full bg-[radial-gradient(circle,var(--accent-secondary),transparent_72%)] opacity-18 blur-3xl"
+        className="pointer-events-none absolute right-[-8rem] top-[24rem] h-80 w-80 rounded-full bg-[radial-gradient(circle,var(--accent-secondary),transparent_76%)] opacity-14 blur-3xl"
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 pb-4 pt-6 md:px-10 lg:flex-row lg:items-center lg:justify-between lg:px-16">
-        <a
-          href="#manifesto"
-          data-hero-item
-          data-animate="pending"
-          className="flex items-center gap-4 text-[11px] uppercase tracking-[0.45em] text-[var(--muted)]"
-        >
-          <span className="relative flex h-4 w-4 items-center justify-center">
-            <span className="absolute inset-0 rounded-full border border-[var(--accent)]/45" />
-            <span className="h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_18px_var(--panel-glow)]" />
-          </span>
-          <span className="font-mono text-[13px] text-[var(--text)]">
-            SEU NOME // ARCHIVE
-          </span>
-        </a>
+      <header className="relative z-20">
+        <div className="mx-auto flex w-full max-w-[1480px] items-center justify-between gap-6 px-6 py-6 md:px-10 lg:px-16">
+          {projectViewId ? (
+            <>
+              <button
+                type="button"
+                onClick={closeProjectView}
+                className="inline-flex items-center gap-3 font-mono text-[12px] font-medium uppercase tracking-[0.22em] text-[var(--text)]"
+              >
+                <span className="inline-flex h-3 w-3 rounded-full bg-[var(--accent)] shadow-[0_0_20px_var(--accent)]" />
+                voltar ao arquivo
+              </button>
 
-        <nav aria-label="Primary">
-          <ul className="flex flex-wrap items-center gap-4 text-[11px] uppercase tracking-[0.38em] text-[var(--dim)] md:gap-8">
-            {navigation.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  data-hero-item
-                  data-animate="pending"
-                  className="transition-colors duration-300 hover:text-[var(--text)]"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+              <div className="hidden font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--dim)] lg:block">
+                {activeManifestation.title}
+              </div>
+            </>
+          ) : (
+            <>
+              <a
+                href="#manifesto"
+                className="flex items-center gap-3 font-mono text-[13px] font-medium uppercase tracking-[0.2em] text-[var(--text)]"
+              >
+                <span className="inline-flex h-3 w-3 rounded-full bg-[var(--accent)] shadow-[0_0_20px_var(--accent)]" />
+                Archive
+              </a>
+
+              <nav
+                aria-label="Primary"
+                className="hidden items-center gap-7 font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--dim)] lg:flex"
+              >
+                {navigation.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="transition-colors duration-300 hover:text-[var(--text)]"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+            </>
+          )}
+        </div>
       </header>
-
       <main className="relative z-10">
+        {projectViewId ? (
+          <ProjectCaseView
+            manifestation={activeManifestation}
+            onBack={closeProjectView}
+          />
+        ) : (
+          <>
         <section
           id="manifesto"
-          className="mx-auto grid min-h-[calc(100svh-88px)] w-full max-w-[1440px] gap-14 px-6 pb-18 pt-8 md:px-10 md:pt-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1.08fr)] lg:px-16 lg:pb-24"
+          className="mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-[1480px] items-center px-6 pb-18 pt-4 md:px-10 lg:px-16"
         >
-          <div className="flex flex-col justify-between gap-12">
-            <div className="space-y-8">
-              <div
-                data-hero-item
-                data-animate="pending"
-                className="inline-flex w-fit items-center gap-3 border border-white/10 bg-white/[0.03] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.36em] text-[var(--muted)] backdrop-blur-sm"
-              >
-                <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
-                junior dev / dark brand systems
-              </div>
+          <div className="grid w-full gap-10 xl:grid-cols-[minmax(0,0.92fr)_minmax(340px,1.08fr)] xl:items-end">
+            <div className="space-y-10">
+              <div className="space-y-6">
+                <div
+                  data-hero-item
+                  data-animate="pending"
+                  className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
+                >
+                  {siteCopy.heroBadge}
+                </div>
 
-              <div className="space-y-5">
                 <p
                   data-hero-item
                   data-animate="pending"
-                  className="max-w-[20rem] font-mono text-[12px] uppercase tracking-[0.42em] text-[var(--accent)]"
+                  className="max-w-[34rem] text-sm leading-7 text-[var(--dim)] sm:text-[15px]"
                 >
-                  grid inteiro, paleta viva e codigo legivel.
+                  {siteCopy.heroEyebrow}
                 </p>
 
                 <h1
                   data-hero-item
                   data-animate="pending"
-                  className="max-w-[10ch] text-5xl font-semibold uppercase leading-[0.9] tracking-[-0.06em] text-[var(--text)] sm:text-6xl lg:text-[6rem]"
+                  className="max-w-[11ch] text-5xl font-semibold leading-[0.92] tracking-[-0.065em] text-[var(--text)] sm:text-6xl xl:text-[5.9rem]"
                 >
-                  Marca forte. Sistema claro.
+                  {siteCopy.heroTitle}
                 </h1>
 
                 <p
                   data-hero-item
                   data-animate="pending"
-                  className="max-w-[34rem] text-base leading-8 text-[var(--muted)] md:text-lg"
+                  className="max-w-[38rem] text-base leading-8 text-[var(--muted)] sm:text-lg"
                 >
-                  Portfolio para um dev junior com assinatura visual escura,
-                  marcas reativas e um fundo modular que muda de clima a cada
-                  projeto.
+                  {siteCopy.heroBody}
                 </p>
               </div>
 
               <div
                 data-hero-item
                 data-animate="pending"
-                className="flex flex-col gap-4 sm:flex-row"
+                className="flex flex-wrap gap-3"
               >
                 <a
                   href="#manifestacoes"
-                  className="signal-line inline-flex items-center justify-center border border-[var(--accent)]/45 bg-[var(--accent-soft)] px-6 py-3 font-mono text-[12px] uppercase tracking-[0.3em] text-[var(--text)] transition-transform duration-300 hover:-translate-y-0.5"
+                  className="signal-line inline-flex items-center justify-center rounded-full border border-[var(--accent)]/32 bg-[var(--accent-soft)] px-6 py-3 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--text)] transition-transform duration-300 hover:-translate-y-0.5"
                 >
-                  abrir manifestos
+                  abrir projetos
                 </a>
                 <a
                   href="#contato"
-                  className="inline-flex items-center justify-center border border-white/12 bg-black/25 px-6 py-3 font-mono text-[12px] uppercase tracking-[0.3em] text-[var(--muted)] backdrop-blur-sm transition-colors duration-300 hover:text-[var(--text)]"
+                  className="inline-flex items-center justify-center rounded-full border border-white/10 bg-black/22 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--muted)] backdrop-blur-sm transition-colors duration-300 hover:text-[var(--text)]"
                 >
                   abrir canal
                 </a>
               </div>
-            </div>
 
-            <div className="grid gap-4 border-t border-white/10 pt-8 md:grid-cols-3">
-              {[
-                'O hover muda a paleta e o padrao do fundo inteiro.',
-                'Kanban e Icarus ficam vetoriais; Synth entra com arte original.',
-                'O texto ficou mais curto para dar espaco ao ambiente.',
-              ].map((item) => (
-                <p
-                  key={item}
-                  data-hero-item
-                  data-animate="pending"
-                  className="max-w-[18rem] text-sm leading-7 text-[var(--dim)]"
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <div
-            data-hero-item
-            data-animate="pending"
-            className="theme-panel relative overflow-hidden border border-white/12 bg-[rgba(9,12,10,0.72)] p-6 backdrop-blur-md md:p-8"
-          >
-            <div className="dither-panel absolute inset-0" />
-
-            <div className="relative grid gap-8 lg:grid-cols-[minmax(0,0.86fr)_240px]">
-              <div className="space-y-5 border-b border-white/10 pb-8 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
-                <div className="font-mono text-[11px] uppercase tracking-[0.38em] text-[var(--dim)]">
-                  active signal / {activeManifestation.index}
-                </div>
-                <div className="signal-bar h-px w-20 bg-[var(--accent)]/80" />
-                <div className="space-y-3">
-                  <h2 className="text-3xl font-semibold uppercase tracking-[-0.04em] text-[var(--text)]">
-                    {activeManifestation.title}
-                  </h2>
-                  <p className="max-w-[28rem] text-base leading-8 text-[var(--text)]">
-                    {activeManifestation.subtitle}
+              <div className="grid gap-3 sm:grid-cols-3">
+                {siteCopy.heroNotes.map((item) => (
+                  <p
+                    key={item}
+                    data-hero-item
+                    data-animate="pending"
+                    className="rounded-[22px] border border-white/8 bg-black/18 px-4 py-4 text-sm leading-7 text-[var(--muted)]"
+                  >
+                    {item}
                   </p>
-                  <p className="max-w-[28rem] text-sm leading-7 text-[var(--muted)]">
-                    {activeManifestation.detail}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-3 pt-2">
-                  {activeManifestation.stack.map((item) => (
-                    <span
-                      key={item}
-                      className="border border-[var(--accent)]/24 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--accent)]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="preview-shell min-h-[300px] overflow-hidden border border-white/10 bg-black/55">
-                <BrandPoster
-                  kind={activeManifestation.logoKind}
-                  palette={activeManifestation.palette}
-                  className="h-full w-full"
-                  title={activeManifestation.posterTitle}
-                  subtitle={activeManifestation.posterSubtitle}
-                  assetSrc={activeAsset}
-                  assetAlt={`${activeManifestation.title} original brand`}
-                />
+                ))}
               </div>
             </div>
 
-            <div className="mt-8 grid gap-6 border-t border-white/10 pt-8 md:grid-cols-3 md:gap-0">
-              {disciplines.map((discipline, index) => (
-                <article
-                  key={discipline.title}
-                  className={`flex h-full flex-col gap-5 border-white/10 px-1 py-2 md:px-6 md:py-3 ${
-                    index === 0 ? '' : 'md:border-l'
-                  }`}
-                >
-                  <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]">
-                    {discipline.title}
+            <div
+              data-hero-item
+              data-animate="pending"
+              className="theme-panel reading-panel relative overflow-hidden rounded-[30px] border border-white/10 px-5 py-5 sm:px-7 sm:py-7"
+            >
+              <div className="dither-panel absolute inset-0 opacity-40" />
+
+              <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(200px,280px)] lg:items-start">
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--accent)]">
+                      active archive / {activeManifestation.index}
+                    </p>
+                    <h2 className="text-3xl font-semibold tracking-[-0.05em] text-[var(--text)] sm:text-[2.4rem]">
+                      {activeManifestation.title}
+                    </h2>
+                    <p className="max-w-[38rem] text-base leading-8 text-[var(--muted)]">
+                      {activeManifestation.detail}
+                    </p>
                   </div>
-                  <ul className="space-y-3 text-sm leading-7 text-[var(--muted)]">
-                    {discipline.items.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                        <span>{item}</span>
-                      </li>
+
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    {disciplines.map((discipline) => (
+                      <article
+                        key={discipline.title}
+                        className="rounded-[22px] border border-white/8 bg-black/24 px-4 py-4"
+                      >
+                        <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--accent)]">
+                          {discipline.title}
+                        </p>
+                        <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--muted)]">
+                          {discipline.items.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      </article>
                     ))}
-                  </ul>
-                </article>
-              ))}
+                  </div>
+                </div>
+
+                <div className="preview-shell relative min-h-[260px] overflow-hidden rounded-[28px] border border-white/10 bg-black/60 p-2">
+                  <BrandPoster
+                    kind={activeManifestation.logoKind}
+                    palette={activeManifestation.palette}
+                    className="h-full w-full rounded-[22px]"
+                    title={activeManifestation.posterTitle}
+                    subtitle={activeManifestation.posterSubtitle}
+                    assetSrc={activeAsset}
+                    assetAlt={`${activeManifestation.title} original brand`}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
-
         <section
           id="manifestacoes"
           data-reveal
-          className="mx-auto w-full max-w-[1440px] border-t border-white/10 px-6 py-20 md:px-10 lg:px-16 lg:py-24"
+          className="mx-auto w-full max-w-[1480px] border-t border-white/10 px-6 py-18 md:px-10 lg:px-16 lg:py-24"
         >
-          <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_380px]">
-            <div className="space-y-10">
-              <div className="max-w-[30rem] space-y-6">
+          <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(280px,340px)]">
+            <div className="space-y-8">
+              <div className="max-w-[46rem] space-y-4">
                 <p
                   data-reveal-item
                   data-animate="pending"
-                  className="font-mono text-[11px] uppercase tracking-[0.4em] text-[var(--accent)]"
+                  className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
                 >
-                  02 / Manifestacoes
+                  {siteCopy.manifestationEyebrow}
                 </p>
                 <h2
                   data-reveal-item
                   data-animate="pending"
-                  className="max-w-[12ch] text-4xl font-semibold uppercase leading-[0.95] tracking-[-0.05em] text-[var(--text)] md:text-5xl"
+                  className="max-w-[15ch] text-4xl font-semibold leading-[0.94] tracking-[-0.055em] text-[var(--text)] sm:text-5xl"
                 >
-                  Logos reais, paletas reais.
+                  {siteCopy.manifestationTitle}
                 </h2>
                 <p
                   data-reveal-item
                   data-animate="pending"
-                  className="text-base leading-8 text-[var(--muted)]"
+                  className="max-w-3xl text-base leading-8 text-[var(--muted)]"
                 >
-                  A lista agora ativa o fundo inteiro. Hover ou foco muda
-                  padrao, glow, quadrados e preview de acordo com cada projeto.
+                  {siteCopy.manifestationBody}
                 </p>
               </div>
 
-              <div className="divide-y divide-white/10 border-y border-white/10">
+              <div className="space-y-4">
                 {manifestations.map((manifestation) => {
                   const isActive = manifestation.id === activeManifestation.id
                   const assetSrc =
@@ -965,62 +766,68 @@ function App() {
                       key={manifestation.id}
                       data-reveal-item
                       data-animate="pending"
-                      tabIndex={0}
-                      onMouseEnter={() => setActiveManifestationId(manifestation.id)}
-                      onFocus={() => setActiveManifestationId(manifestation.id)}
-                      className={`project-node group grid gap-6 px-0 py-8 transition-colors duration-300 md:grid-cols-[90px_minmax(0,1fr)_220px] md:px-4 ${
-                        isActive ? 'is-active' : ''
-                      }`}
+                      className="rounded-[30px] border border-white/10 bg-black/18 px-4 py-4 sm:px-5"
                     >
-                      <div className="space-y-3">
-                        <BrandMark
-                          kind={manifestation.logoKind}
-                          palette={manifestation.palette}
-                          className={
-                            manifestation.logoMode === 'image'
-                              ? 'h-18 w-18 overflow-hidden border border-white/10 bg-[#666b70]'
-                              : 'h-18 w-18 border border-white/10 bg-black/35 p-2'
-                          }
-                          assetSrc={assetSrc}
-                          assetAlt={`${manifestation.title} original brand`}
-                        />
-                        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--dim)]">
-                          {manifestation.index}
-                        </p>
-                      </div>
+                      <button
+                        type="button"
+                        onMouseEnter={() => handleActivate(manifestation.id)}
+                        onFocus={() => handleActivate(manifestation.id)}
+                        onClick={() => openProjectView(manifestation.id)}
+                        className={`manifestation-toggle group grid w-full gap-5 rounded-[24px] px-2 py-2 text-left transition-colors duration-300 md:grid-cols-[90px_minmax(0,1fr)_180px] ${
+                          isActive ? 'is-active' : ''
+                        }`}
+                      >
+                        <div className="space-y-3">
+                          <BrandMark
+                            kind={manifestation.logoKind}
+                            palette={manifestation.palette}
+                            className={
+                              manifestation.logoMode === 'image'
+                                ? 'h-[74px] w-[74px] overflow-hidden rounded-[20px] border border-white/10 bg-[#5f666d] p-1.5'
+                                : 'h-[74px] w-[74px] rounded-[20px] border border-white/10 bg-black/35 p-2'
+                            }
+                            assetSrc={assetSrc}
+                            assetAlt={`${manifestation.title} original brand`}
+                          />
+                          <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--dim)]">
+                            {manifestation.index}
+                          </p>
+                        </div>
 
-                      <div className="space-y-4">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <h3 className="text-3xl font-semibold uppercase tracking-[-0.04em] text-[var(--text)] transition-transform duration-300 group-hover:translate-x-2">
-                            {manifestation.title}
-                          </h3>
-                          <span className="border border-[var(--accent)]/24 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--accent)]">
-                            {manifestation.label}
+                        <div className="space-y-3">
+                          <div className="flex flex-wrap items-center gap-3">
+                            <h3 className="text-3xl font-semibold tracking-[-0.05em] text-[var(--text)] transition-transform duration-300 group-hover:translate-x-1.5">
+                              {manifestation.title}
+                            </h3>
+                            <span className="rounded-full border border-[var(--accent)]/20 bg-[var(--accent-soft)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent)]">
+                              {manifestation.label}
+                            </span>
+                          </div>
+                          <p className="max-w-2xl text-base leading-8 text-[var(--muted)]">
+                            {manifestation.subtitle}
+                          </p>
+                          <p className="max-w-3xl text-[15px] leading-7 text-[var(--dim)]">
+                            {manifestation.summary}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-col justify-between gap-4 md:items-end">
+                          <div className="flex flex-wrap gap-2 md:justify-end">
+                            {manifestation.stack.slice(0, 3).map((item) => (
+                              <span
+                                key={item}
+                                className="rounded-full border border-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
+                              >
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+
+                          <span className="font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--accent)]">
+                            abrir projeto
                           </span>
                         </div>
-                        <p className="text-base leading-8 text-[var(--text)]">
-                          {manifestation.subtitle}
-                        </p>
-                        <p className="max-w-2xl text-sm leading-7 text-[var(--muted)]">
-                          {manifestation.summary}
-                        </p>
-                      </div>
-
-                      <div className="space-y-4">
-                        <ul className="space-y-3 font-mono text-[12px] uppercase tracking-[0.22em] text-[var(--text)]">
-                          {manifestation.stack.map((item) => (
-                            <li
-                              key={item}
-                              className="border-b border-white/8 pb-3 last:border-b-0 last:pb-0"
-                            >
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                        <p className="text-sm leading-7 text-[var(--dim)]">
-                          {manifestation.cue}
-                        </p>
-                      </div>
+                      </button>
                     </article>
                   )
                 })}
@@ -1028,32 +835,41 @@ function App() {
             </div>
 
             <aside
-              ref={previewRef}
               data-reveal-item
               data-animate="pending"
-              className="theme-panel sticky top-24 hidden h-fit overflow-hidden border border-white/12 bg-[rgba(9,12,10,0.72)] p-5 backdrop-blur-md xl:block"
+              className="theme-panel reading-panel relative hidden h-fit overflow-hidden rounded-[30px] border border-white/10 px-5 py-5 xl:sticky xl:top-8 xl:block"
             >
-              <div className="dither-panel absolute inset-0 opacity-80" />
+              <div className="dither-panel absolute inset-0 opacity-35" />
 
               <div className="relative space-y-5">
-                <div
-                  data-preview-item
-                  className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--dim)]"
-                >
-                  <span>active preview</span>
-                  <span className="text-[var(--accent)]">
-                    {activeManifestation.index}
-                  </span>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--accent)]">
+                      active preview
+                    </p>
+                    <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">
+                      {activeManifestation.title}
+                    </h3>
+                  </div>
+
+                  <BrandMark
+                    kind={activeManifestation.logoKind}
+                    palette={activeManifestation.palette}
+                    className={
+                      activeManifestation.logoMode === 'image'
+                        ? 'h-16 w-16 overflow-hidden rounded-[18px] border border-white/10 bg-[#5f666d] p-1.5'
+                        : 'h-16 w-16 rounded-[18px] border border-white/10 bg-black/35 p-2'
+                    }
+                    assetSrc={activeAsset}
+                    assetAlt={`${activeManifestation.title} original brand`}
+                  />
                 </div>
 
-                <div
-                  data-preview-item
-                  className="preview-shell min-h-[360px] overflow-hidden border border-white/10 bg-black/60"
-                >
+                <div className="preview-shell relative min-h-[320px] overflow-hidden rounded-[24px] border border-white/10 bg-black/55 p-2">
                   <BrandPoster
                     kind={activeManifestation.logoKind}
                     palette={activeManifestation.palette}
-                    className="h-full w-full"
+                    className="h-full w-full rounded-[18px]"
                     title={activeManifestation.posterTitle}
                     subtitle={activeManifestation.posterSubtitle}
                     assetSrc={activeAsset}
@@ -1061,11 +877,11 @@ function App() {
                   />
                 </div>
 
-                <div data-preview-item className="space-y-3">
-                  <p className="font-mono text-[12px] uppercase tracking-[0.28em] text-[var(--accent)]">
-                    {activeManifestation.title}
+                <div className="space-y-3">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--dim)]">
+                    {activeManifestation.cue}
                   </p>
-                  <p className="text-sm leading-7 text-[var(--muted)]">
+                  <p className="text-[15px] leading-7 text-[var(--muted)]">
                     {activeManifestation.detail}
                   </p>
                 </div>
@@ -1073,53 +889,51 @@ function App() {
             </aside>
           </div>
         </section>
-
         <section
           id="processo"
           data-reveal
-          className="mx-auto w-full max-w-[1440px] border-t border-white/10 px-6 py-20 md:px-10 lg:px-16 lg:py-24"
+          className="mx-auto w-full max-w-[1480px] border-t border-white/10 px-6 py-18 md:px-10 lg:px-16 lg:py-24"
         >
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-            <div className="space-y-6">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+            <div className="space-y-5">
               <p
                 data-reveal-item
                 data-animate="pending"
-                className="font-mono text-[11px] uppercase tracking-[0.4em] text-[var(--accent)]"
+                className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
               >
-                03 / Rito de entrega
+                {siteCopy.processEyebrow}
               </p>
               <h2
                 data-reveal-item
                 data-animate="pending"
-                className="max-w-[13ch] text-4xl font-semibold uppercase leading-[0.96] tracking-[-0.05em] text-[var(--text)] md:text-5xl"
+                className="max-w-[13ch] text-4xl font-semibold leading-[0.96] tracking-[-0.05em] text-[var(--text)] sm:text-5xl"
               >
-                O estranho fica na forma. O metodo fica no codigo.
+                {siteCopy.processTitle}
               </h2>
               <p
                 data-reveal-item
                 data-animate="pending"
                 className="max-w-xl text-base leading-8 text-[var(--muted)]"
               >
-                O site continua noturno e mistico, mas agora a atmosfera mora
-                num background vivo e em marcas com papel bem definido.
+                {siteCopy.processBody}
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3">
               {rituals.map((ritual) => (
                 <article
                   key={ritual.title}
                   data-reveal-item
                   data-animate="pending"
-                  className="border-l border-white/10 pl-5"
+                  className="reading-panel rounded-[24px] border border-white/10 px-5 py-5"
                 >
-                  <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--accent)]">
                     {ritual.step}
                   </p>
-                  <h3 className="mt-5 text-2xl font-semibold uppercase tracking-[0.08em] text-[var(--text)]">
+                  <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">
                     {ritual.title}
                   </h3>
-                  <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                  <p className="mt-3 text-[15px] leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
                     {ritual.description}
                   </p>
                 </article>
@@ -1127,25 +941,20 @@ function App() {
             </div>
           </div>
 
-          <div className="mt-14 grid gap-8 border-t border-white/10 pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.5fr)]">
+          <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
             <div
               data-reveal-item
               data-animate="pending"
-              className="space-y-5"
+              className="reading-panel rounded-[28px] border border-white/10 px-5 py-5 sm:px-6"
             >
-              <p className="font-mono text-[11px] uppercase tracking-[0.36em] text-[var(--dim)]">
-                O que se prova aqui
+              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--accent)]">
+                {siteCopy.proofEyebrow}
               </p>
-              <ul className="grid gap-4 text-base leading-8 text-[var(--muted)] md:grid-cols-2">
-                {[
-                  'Marca propria sem parecer mock aleatorio.',
-                  'Hover que muda atmosfera com criterio.',
-                  'Fundo global responde ao projeto ativo.',
-                  'Synth entra com arte original; os outros seguem vetoriais.',
-                ].map((item) => (
+              <ul className="mt-5 grid gap-4 text-[15px] leading-7 text-[var(--muted)] sm:text-base sm:leading-8 md:grid-cols-2">
+                {siteCopy.proofItems.map((item) => (
                   <li
                     key={item}
-                    className="border-b border-white/8 pb-4 last:border-b-0 md:last:border-b"
+                    className="rounded-[20px] border border-white/8 bg-black/20 px-4 py-4"
                   >
                     {item}
                   </li>
@@ -1156,16 +965,17 @@ function App() {
             <aside
               data-reveal-item
               data-animate="pending"
-              className="theme-panel border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm"
+              className="theme-panel reading-panel relative overflow-hidden rounded-[28px] border border-white/10 px-5 py-5"
             >
-              <p className="font-mono text-[11px] uppercase tracking-[0.38em] text-[var(--accent)]">
-                Fundo inteiro, nao lateral
-              </p>
-              <p className="mt-5 text-base leading-8 text-[var(--muted)]">
-                Os quadrados agora ocupam a viewport toda com seed por projeto.
-                O `Synth` sai do desenho procedural e passa a usar a arte
-                dedicada.
-              </p>
+              <div className="dither-panel absolute inset-0 opacity-35" />
+              <div className="relative space-y-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--accent)]">
+                  {siteCopy.proofAsideTitle}
+                </p>
+                <p className="text-[15px] leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
+                  {siteCopy.proofAsideBody}
+                </p>
+              </div>
             </aside>
           </div>
         </section>
@@ -1173,52 +983,47 @@ function App() {
         <section
           id="contato"
           data-reveal
-          className="mx-auto w-full max-w-[1440px] px-6 pb-20 pt-4 md:px-10 lg:px-16 lg:pb-28"
+          className="mx-auto w-full max-w-[1480px] px-6 pb-20 pt-4 md:px-10 lg:px-16 lg:pb-28"
         >
-          <div className="theme-panel relative overflow-hidden border border-white/12 bg-[rgba(9,12,10,0.74)] px-6 py-10 backdrop-blur-md md:px-10 md:py-14">
-            <div className="dither-panel absolute inset-0 opacity-80" />
-            <div className="pointer-events-none absolute right-[-8rem] top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--preview-tint),transparent_70%)] blur-3xl" />
+          <div className="theme-panel reading-panel relative overflow-hidden rounded-[32px] border border-white/10 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+            <div className="dither-panel absolute inset-0 opacity-34" />
+            <div className="pointer-events-none absolute right-[-6rem] top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--preview-tint),transparent_70%)] blur-3xl" />
 
-            <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_340px] lg:items-end">
-              <div className="space-y-6">
+            <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.04fr)_minmax(280px,360px)] lg:items-end">
+              <div className="space-y-5">
                 <p
                   data-reveal-item
                   data-animate="pending"
-                  className="font-mono text-[11px] uppercase tracking-[0.4em] text-[var(--accent)]"
+                  className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
                 >
-                  04 / Canal aberto
+                  {siteCopy.contactEyebrow}
                 </p>
                 <h2
                   data-reveal-item
                   data-animate="pending"
-                  className="max-w-[13ch] text-4xl font-semibold uppercase leading-[0.95] tracking-[-0.05em] text-[var(--text)] md:text-5xl"
+                  className="max-w-[13ch] text-4xl font-semibold leading-[0.95] tracking-[-0.05em] text-[var(--text)] sm:text-5xl"
                 >
-                  O arquivo esta pronto para receber seus dados reais.
+                  {siteCopy.contactTitle}
                 </h2>
                 <p
                   data-reveal-item
                   data-animate="pending"
                   className="max-w-2xl text-base leading-8 text-[var(--muted)]"
                 >
-                  Se quiser, a proxima passada pode trocar cada projeto dummy
-                  pelos seus cases reais, textos finais e links definitivos.
+                  {siteCopy.contactBody}
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {contactLinks.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
                     target={link.href.startsWith('http') ? '_blank' : undefined}
-                    rel={
-                      link.href.startsWith('http')
-                        ? 'noreferrer'
-                        : undefined
-                    }
+                    rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
                     data-reveal-item
                     data-animate="pending"
-                    className="group flex items-center justify-between border-b border-white/10 py-4 font-mono text-[12px] uppercase tracking-[0.26em] text-[var(--muted)] transition-colors duration-300 hover:text-[var(--text)]"
+                    className="group flex items-center justify-between rounded-[22px] border border-white/10 bg-black/22 px-4 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--muted)] transition-colors duration-300 hover:text-[var(--text)]"
                   >
                     <span>{link.label}</span>
                     <span className="text-right text-[var(--text)] transition-transform duration-300 group-hover:-translate-x-1">
@@ -1230,6 +1035,8 @@ function App() {
             </div>
           </div>
         </section>
+          </>
+        )}
       </main>
     </div>
   )

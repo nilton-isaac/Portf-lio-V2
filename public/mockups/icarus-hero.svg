@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#0E0814"/>
+  <rect width="1200" height="720" fill="url(#a)" opacity=".24"/>
+  <circle cx="320" cy="240" r="122" fill="#1A0F24" stroke="#CF79FF"/>
+  <circle cx="320" cy="240" r="54" fill="#CF79FF"/>
+  <circle cx="320" cy="240" r="22" fill="#0E0814"/>
+  <path d="M186 240C236 164 404 164 454 240C404 316 236 316 186 240Z" stroke="#F7ECFF" stroke-width="14"/>
+  <rect x="606" y="124" width="436" height="64" rx="20" fill="#17111F"/>
+  <rect x="606" y="214" width="360" height="34" rx="16" fill="#24192F"/>
+  <rect x="606" y="272" width="408" height="34" rx="16" fill="#24192F"/>
+  <rect x="606" y="330" width="332" height="34" rx="16" fill="#24192F"/>
+  <path d="M606 446C684 396 726 520 814 470C902 420 942 526 1034 466" stroke="#FF63D5" stroke-width="8" stroke-linecap="round"/>
+  <text x="606" y="542" fill="#FFF9FF" font-family="Manrope, Arial, sans-serif" font-size="78" font-weight="700">Icarus Type</text>
+  <defs>
+    <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="translate(832 210) rotate(140.629) scale(497.485 289.991)">
+      <stop stop-color="#FF63D5"/>
+      <stop offset="1" stop-color="#FF63D5" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
