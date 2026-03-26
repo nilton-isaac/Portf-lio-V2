@@ -1,0 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Sora', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+:root {
+  --text: #edf0ea;
+  --muted: #a4aca3;
+  --dim: #657064;
+  --accent: #7ef5a1;
+  --accent-secondary: #a3b2ff;
+  --accent-tertiary: #ff75ec;
+  --accent-soft: rgba(126, 245, 161, 0.14);
+  --wash-left: rgba(31, 99, 50, 0.28);
+  --wash-center: rgba(10, 16, 11, 0.72);
+  --wash-right: rgba(255, 255, 255, 0.06);
+  --dot-color: rgba(126, 245, 161, 0.12);
+  --tile-strong: rgba(126, 245, 161, 0.78);
+  --tile-soft: rgba(126, 245, 161, 0.34);
+  --tile-outline: rgba(126, 245, 161, 0.22);
+  --panel-glow: rgba(126, 245, 161, 0.18);
+  --preview-tint: rgba(126, 245, 161, 0.18);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #020303;
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p,
+h1,
+h2,
+h3,
+ul {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+::selection {
+  background: rgba(126, 245, 161, 0.22);
+  color: #f7fff8;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.theme-shell {
+  min-height: 100vh;
+}
+
+.theme-wash {
+  background:
+    radial-gradient(circle at 12% 14%, var(--wash-left), transparent 34%),
+    radial-gradient(circle at 82% 20%, var(--wash-right), transparent 28%),
+    radial-gradient(circle at 58% 30%, color-mix(in srgb, var(--accent-secondary) 10%, transparent), transparent 32%),
+    linear-gradient(180deg, rgba(3, 4, 4, 0.98) 0%, var(--wash-center) 46%, rgba(3, 4, 4, 1) 100%);
+  transition: background 560ms ease;
+}
+
+.theme-grid {
+  opacity: 0.42;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+    radial-gradient(circle at 1px 1px, var(--dot-color) 1px, transparent 0),
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--accent-secondary) 20%, transparent) 1px, transparent 0);
+  background-size:
+    80px 80px,
+    80px 80px,
+    20px 20px,
+    44px 44px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    12px 10px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.96), transparent 96%);
+  transition: opacity 560ms ease, background-image 560ms ease;
+}
+
+[data-animate='pending'] {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(10px);
+}
+
+[data-animate='ready'] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.theme-panel {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.02), 0 0 80px var(--panel-glow);
+  transition:
+    box-shadow 420ms ease,
+    border-color 420ms ease,
+    background-color 420ms ease;
+}
+
+.dither-panel {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.045) 1px, transparent 0),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.026) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 75%, transparent);
+  background-size:
+    16px 16px,
+    8px 8px;
+  opacity: 0.36;
+}
+
+.preview-shell {
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 48px color-mix(in srgb, var(--preview-tint) 55%, transparent);
+  transition: box-shadow 420ms ease;
+}
+
+.preview-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 24%),
+    radial-gradient(circle at 50% 40%, var(--preview-tint), transparent 72%);
+  mix-blend-mode: screen;
+  opacity: 0.34;
+  pointer-events: none;
+}
+
+.brand-asset {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.brand-asset__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.brand-asset--mark .brand-asset__image {
+  transform: scale(1.06);
+}
+
+.brand-asset--poster .brand-asset__image {
+  transform: scale(1);
+}
+
+.signal-line,
+.signal-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.signal-line::after,
+.signal-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform: translateX(-100%);
+  animation: line-scan 4.8s linear infinite;
+}
+
+.ambient-pattern-layer {
+  overflow: hidden;
+}
+
+.ambient-pattern-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 32%, transparent 0, rgba(3, 4, 5, 0.08) 52%, rgba(3, 4, 5, 0.34) 100%),
+    linear-gradient(180deg, rgba(3, 4, 5, 0.08), rgba(3, 4, 5, 0.03) 22%, rgba(3, 4, 5, 0.22) 100%);
+}
+
+.ambient-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: var(--ambient-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(1.02);
+  will-change: opacity;
+}
+
+.ambient-pattern--current {
+  animation: ambient-pattern-in 420ms ease both;
+}
+
+.ambient-pattern--previous {
+  animation: ambient-pattern-out 420ms ease both;
+}
+
+.project-node {
+  transition:
+    background-color 320ms ease,
+    border-color 320ms ease;
+}
+
+.project-node.is-active {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent-soft) 85%, transparent),
+      transparent 72%
+    ),
+    rgba(255, 255, 255, 0.03);
+}
+
+.project-node:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+
+@keyframes line-scan {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ambient-pattern-in {
+  from {
+    opacity: 0.24;
+    transform: scale(1.015);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ambient-pattern-out {
+  from {
+    opacity: 0.88;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1279px) {
+  .theme-grid {
+    background-size:
+      60px 60px,
+      60px 60px,
+      18px 18px,
+      38px 38px;
+  }
+
+  .ambient-pattern {
+    background-size: 108% 108%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .signal-line::after,
+  .signal-bar::after {
+    animation: none;
+  }
+
+  .theme-wash,
+  .theme-grid,
+  .theme-panel,
+  .preview-shell,
+  .ambient-pattern,
+  .project-node {
+    transition: none;
+  }
+
+  .ambient-pattern--current,
+  .ambient-pattern--previous {
+    animation: none;
+  }
+}
