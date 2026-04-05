@@ -6,7 +6,7 @@ import {
   type CSSProperties,
 } from 'react'
 import { animate, createTimeline, stagger } from 'animejs'
-import { BrandMark, BrandPoster } from './brand-system'
+import { BrandMark, BrandPoster, SignatureMark, TechLogo } from './brand-system'
 import { ProjectCaseView } from './components/project-case-view'
 import {
   contactLinks,
@@ -562,10 +562,12 @@ function App() {
             <>
               <a
                 href="#manifesto"
-                className="flex items-center gap-3 font-mono text-[13px] font-medium uppercase tracking-[0.2em] text-[var(--text)]"
+                className="flex items-center gap-3 text-[var(--text)]"
               >
-                <span className="inline-flex h-3 w-3 rounded-full bg-[var(--accent)] shadow-[0_0_20px_var(--accent)]" />
-                Archive
+                <SignatureMark className="h-7 w-[104px] shrink-0" />
+                <span className="hidden text-sm font-medium tracking-[0.02em] text-[var(--dim)] md:block">
+                  Isaac Rubio
+                </span>
               </a>
 
               <nav
@@ -598,125 +600,158 @@ function App() {
           id="manifesto"
           className="mx-auto flex min-h-[calc(100svh-88px)] w-full max-w-[1480px] items-center px-6 pb-18 pt-4 md:px-10 lg:px-16"
         >
-          <div className="grid w-full gap-10 xl:grid-cols-[minmax(0,0.92fr)_minmax(340px,1.08fr)] xl:items-end">
-            <div className="space-y-10">
-              <div className="space-y-6">
-                <div
-                  data-hero-item
-                  data-animate="pending"
-                  className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
-                >
-                  {siteCopy.heroBadge}
-                </div>
-
-                <p
-                  data-hero-item
-                  data-animate="pending"
-                  className="max-w-[34rem] text-sm leading-7 text-[var(--dim)] sm:text-[15px]"
-                >
-                  {siteCopy.heroEyebrow}
-                </p>
-
-                <h1
-                  data-hero-item
-                  data-animate="pending"
-                  className="max-w-[11ch] text-5xl font-semibold leading-[0.92] tracking-[-0.065em] text-[var(--text)] sm:text-6xl xl:text-[5.9rem]"
-                >
-                  {siteCopy.heroTitle}
-                </h1>
-
-                <p
-                  data-hero-item
-                  data-animate="pending"
-                  className="max-w-[38rem] text-base leading-8 text-[var(--muted)] sm:text-lg"
-                >
-                  {siteCopy.heroBody}
-                </p>
-              </div>
-
+          <div className="w-full max-w-[880px] space-y-10">
+            <div className="space-y-6">
               <div
                 data-hero-item
                 data-animate="pending"
-                className="flex flex-wrap gap-3"
+                className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
               >
-                <a
-                  href="#manifestacoes"
-                  className="signal-line inline-flex items-center justify-center rounded-full border border-[var(--accent)]/32 bg-[var(--accent-soft)] px-6 py-3 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--text)] transition-transform duration-300 hover:-translate-y-0.5"
-                >
-                  abrir projetos
-                </a>
-                <a
-                  href="#contato"
-                  className="inline-flex items-center justify-center rounded-full border border-white/10 bg-black/22 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--muted)] backdrop-blur-sm transition-colors duration-300 hover:text-[var(--text)]"
-                >
-                  abrir canal
-                </a>
+                {siteCopy.heroBadge}
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                {siteCopy.heroNotes.map((item) => (
-                  <p
-                    key={item}
-                    data-hero-item
-                    data-animate="pending"
-                    className="rounded-[22px] border border-white/8 bg-black/18 px-4 py-4 text-sm leading-7 text-[var(--muted)]"
-                  >
-                    {item}
-                  </p>
-                ))}
-              </div>
+              <p
+                data-hero-item
+                data-animate="pending"
+                className="max-w-[34rem] text-sm leading-7 text-[var(--dim)] sm:text-[15px]"
+              >
+                {siteCopy.heroEyebrow}
+              </p>
+
+              <h1
+                data-hero-item
+                data-animate="pending"
+                className="max-w-[11ch] text-5xl font-semibold leading-[0.92] tracking-[-0.065em] text-[var(--text)] sm:text-6xl xl:text-[5.9rem]"
+              >
+                {siteCopy.heroTitle}
+              </h1>
+
+              <p
+                data-hero-item
+                data-animate="pending"
+                className="max-w-[40rem] text-base leading-8 text-[var(--muted)] sm:text-lg"
+              >
+                {siteCopy.heroBody}
+              </p>
             </div>
 
             <div
               data-hero-item
               data-animate="pending"
+              className="flex flex-wrap gap-3"
+            >
+              <a
+                href="#manifestacoes"
+                className="signal-line inline-flex items-center justify-center rounded-full border border-[var(--accent)]/32 bg-[var(--accent-soft)] px-6 py-3 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--text)] transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                abrir projetos
+              </a>
+              <a
+                href="#contato"
+                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-black/22 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--muted)] backdrop-blur-sm transition-colors duration-300 hover:text-[var(--text)]"
+              >
+                contato
+              </a>
+            </div>
+          </div>
+        </section>
+        <section
+          id="stack"
+          data-reveal
+          className="mx-auto w-full max-w-[1480px] border-t border-white/10 px-6 py-18 md:px-10 lg:px-16 lg:py-24"
+        >
+          <div className="space-y-8">
+            <div className="max-w-[54rem] space-y-4">
+              <p
+                data-reveal-item
+                data-animate="pending"
+                className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--accent)]"
+              >
+                {siteCopy.heroPanelEyebrow}
+              </p>
+              <h2
+                data-reveal-item
+                data-animate="pending"
+                className="max-w-[16ch] text-4xl font-semibold leading-[0.94] tracking-[-0.055em] text-[var(--text)] sm:text-5xl"
+              >
+                {siteCopy.heroPanelTitle}
+              </h2>
+              <p
+                data-reveal-item
+                data-animate="pending"
+                className="max-w-[48rem] text-base leading-8 text-[var(--muted)]"
+              >
+                {siteCopy.heroPanelBody}
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {siteCopy.heroNotes.map((item) => (
+                <p
+                  key={item}
+                  data-reveal-item
+                  data-animate="pending"
+                  className="rounded-[22px] border border-white/8 bg-black/18 px-4 py-4 text-sm leading-7 text-[var(--muted)]"
+                >
+                  {item}
+                </p>
+              ))}
+            </div>
+
+            <div
+              data-reveal-item
+              data-animate="pending"
               className="theme-panel reading-panel relative overflow-hidden rounded-[30px] border border-white/10 px-5 py-5 sm:px-7 sm:py-7"
             >
               <div className="dither-panel absolute inset-0 opacity-40" />
 
-              <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(200px,280px)] lg:items-start">
-                <div className="space-y-6">
-                  <div className="space-y-3">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--accent)]">
-                      active archive / {activeManifestation.index}
+              <div className="relative space-y-6">
+                <div className="flex justify-end">
+                  <a
+                    href="https://github.com/nilton-isaac"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group w-full max-w-[300px] rounded-[24px] border border-[var(--accent)]/18 bg-[var(--accent-soft)]/40 px-5 py-5 transition-transform duration-300 hover:-translate-y-0.5"
+                  >
+                    <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--accent)]">
+                      git / github
                     </p>
-                    <h2 className="text-3xl font-semibold tracking-[-0.05em] text-[var(--text)] sm:text-[2.4rem]">
-                      {activeManifestation.title}
-                    </h2>
-                    <p className="max-w-[38rem] text-base leading-8 text-[var(--muted)]">
-                      {activeManifestation.detail}
+                    <p className="mt-4 text-lg font-semibold tracking-[-0.03em] text-[var(--text)]">
+                      {siteCopy.heroPanelLinkLabel}
                     </p>
-                  </div>
-
-                  <div className="grid gap-4 sm:grid-cols-3">
-                    {disciplines.map((discipline) => (
-                      <article
-                        key={discipline.title}
-                        className="rounded-[22px] border border-white/8 bg-black/24 px-4 py-4"
-                      >
-                        <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--accent)]">
-                          {discipline.title}
-                        </p>
-                        <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--muted)]">
-                          {discipline.items.map((item) => (
-                            <li key={item}>{item}</li>
-                          ))}
-                        </ul>
-                      </article>
-                    ))}
-                  </div>
+                    <p className="mt-3 text-[15px] leading-7 text-[var(--muted)]">
+                      {siteCopy.heroPanelLinkBody}
+                    </p>
+                    <span className="mt-5 inline-flex font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--text)] transition-transform duration-300 group-hover:translate-x-1">
+                      abrir perfil
+                    </span>
+                  </a>
                 </div>
 
-                <div className="preview-shell relative min-h-[260px] overflow-hidden rounded-[28px] border border-white/10 bg-black/60 p-2">
-                  <BrandPoster
-                    kind={activeManifestation.logoKind}
-                    palette={activeManifestation.palette}
-                    className="h-full w-full rounded-[22px]"
-                    title={activeManifestation.posterTitle}
-                    subtitle={activeManifestation.posterSubtitle}
-                    assetSrc={activeAsset}
-                    assetAlt={`${activeManifestation.title} original brand`}
-                  />
+                <div className="space-y-4">
+                  {disciplines.map((discipline) => (
+                    <article
+                      key={discipline.title}
+                      className="self-start rounded-[22px] border border-white/8 bg-black/24 px-4 py-4"
+                    >
+                      <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-[var(--accent)]">
+                        {discipline.title}
+                      </p>
+                      <div className="mt-4 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {discipline.items.map((item) => (
+                          <div
+                            key={item.label}
+                            className="group grid min-h-[72px] grid-cols-[40px_minmax(0,1fr)] items-center gap-3 rounded-[18px] border border-white/10 bg-black/28 px-4 py-3 transition-colors duration-300 hover:border-[var(--accent)]/22 hover:bg-black/34"
+                          >
+                            <TechLogo kind={item.kind} className="h-10 w-10 shrink-0" />
+                            <span className="min-w-0 break-words font-mono text-[10px] leading-4 tracking-[0.04em] text-[var(--muted)] transition-colors duration-300 group-hover:text-[var(--text)] sm:text-[11px]">
+                              {item.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </article>
+                  ))}
                 </div>
               </div>
             </div>
@@ -845,7 +880,7 @@ function App() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--accent)]">
-                      active preview
+                      preview do projeto
                     </p>
                     <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">
                       {activeManifestation.title}

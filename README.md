@@ -14,7 +14,7 @@ Portfolio em React + TypeScript + Vite com direcao visual escura, background rea
 
 - `src/App.tsx`: composicao principal da landing e geracao do background dinamico.
 - `src/site-data.ts`: camada de dados dos projetos, copy temporario e configuracao visual.
-- `src/components/project-dossier.tsx`: visualizacao expandida de cada projeto.
+- `src/components/project-case-view.tsx`: visualizacao expandida de cada projeto.
 - `src/brand-system.tsx`: logos vetoriais e uso do PNG real do Synth.
 - `public/mockups/`: mockups SVG locais usados como placeholder.
 - `public/synth-logo-original.png`: asset real do Synth WireNotion.
@@ -68,7 +68,7 @@ vercel deploy
 
 ## Conteudo temporario
 
-- Os textos em `src/site-data.ts` estao como placeholder e podem ser trocados pelos textos finais.
+- Os textos em `src/site-data.ts` ja foram personalizados com a primeira versao do portfolio e podem ser refinados conforme novos detalhes entrarem.
 - Os mockups em `public/mockups/` sao locais e podem ser substituidos por capturas reais dos projetos.
 - O Synth ja usa o PNG real recebido do usuario.
 

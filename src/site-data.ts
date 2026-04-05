@@ -1,4 +1,4 @@
-import type { BrandLogoKind, BrandPalette } from './brand-system'
+import type { BrandLogoKind, BrandPalette, TechLogoKind } from './brand-system'
 
 export type PatternEmphasis = 'orthogonal' | 'orbital' | 'diagonal'
 
@@ -65,60 +65,111 @@ export type Manifestation = {
   detailSections: DetailSection[]
 }
 
+export type DisciplineItem = {
+  label: string
+  kind: TechLogoKind
+}
+
+export type DisciplineGroup = {
+  title: string
+  items: DisciplineItem[]
+}
+
 export const navigation = [
-  { label: '01. GRIMOIRE', href: '#manifesto' },
-  { label: '02. MANIFESTOS', href: '#manifestacoes' },
-  { label: '03. RITO', href: '#processo' },
-  { label: '04. CANAL', href: '#contato' },
+  { label: '01. PERFIL', href: '#manifesto' },
+  { label: '02. PROJETOS', href: '#manifestacoes' },
+  { label: '03. PROCESSO', href: '#processo' },
+  { label: '04. CONTATO', href: '#contato' },
 ]
 
 export const siteCopy = {
-  heroBadge: 'junior dev / archive build',
-  heroEyebrow: 'lorem ipsum, visual systems and readable code.',
-  heroTitle: 'Interfaces escuras. Leitura clara.',
+  heroBadge: 'portfolio / isaac jean rubio',
+  heroEyebrow:
+    'Desenvolvedor Junior na ProHound com foco em frontend, automacao e ferramentas para uso real.',
+  heroTitle: 'Isaac Jean Rubio',
   heroBody:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Porttitor lacus luctus accumsan tortor posuere ac ut consequat.',
+    'Sou desenvolvedor com formacao tecnica em Eletronica e tecnologo em Analise e Desenvolvimento de Sistemas. Desde 2024 atuo na ProHound, onde comecei como auxiliar de desenvolvimento e hoje trabalho como Analista Junior, criando interfaces, automacoes e sistemas voltados a rotina real.',
+  heroPanelEyebrow: 'stack / linguagens / workflow',
+  heroPanelTitle: 'Tecnologias com que ja trabalhei',
+  heroPanelBody:
+    'Minha experiencia passa por frontend, automacao, integracao e prototipacao. Aqui esta a base de linguagens, frameworks e ferramentas que mais aparecem no meu fluxo.',
+  heroPanelLinkLabel: 'github.com/nilton-isaac',
+  heroPanelLinkBody:
+    'Uso Git e GitHub para versionamento, organizacao do codigo e historico de projetos e estudos.',
   heroNotes: [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'Nunc lobortis mattis aliquam faucibus purus in massa.',
-    'Ut consequat semper viverra nam libero justo laoreet.',
+    'ProHound desde 2024',
+    'Auxiliar de desenvolvimento -> Analista Junior',
+    'Frontend, automacao e organizacao de fluxo',
   ],
-  manifestationEyebrow: '02 / Manifestacoes',
-  manifestationTitle: 'Projetos com visualizacao dedicada e leitura melhor.',
+  manifestationEyebrow: '02 / Projetos em foco',
+  manifestationTitle: 'Projetos autorais que mostram produto, organizacao e leitura de interface.',
   manifestationBody:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Clique em um projeto para abrir uma visualizacao dedicada com imagens temporarias, stack e contexto.',
-  processEyebrow: '03 / Rito de entrega',
-  processTitle: 'Estrutura, leitura e placeholders antes do conteudo final.',
+    'Kanban Nine e Synth WireNotion concentram hoje o tipo de sistema que mais me interessa construir: ferramentas praticas, com estrutura clara e espaco para evolucao.',
+  processEyebrow: '03 / Processo',
+  processTitle: 'Problema real, estrutura clara e iteracao continua.',
   processBody:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  proofEyebrow: 'O que se prova aqui',
+    'Meu processo mistura leitura de contexto, modelagem de fluxo e polimento visual. A ideia e sair do rascunho rapido para uma estrutura que faca sentido no uso do dia a dia.',
+  proofEyebrow: 'Base e repertorio',
   proofItems: [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'Nibh ipsum consequat nisl vel pretium lectus quam.',
-    'Amet nulla facilisi morbi tempus iaculis urna id.',
-    'Scelerisque varius morbi enim nunc faucibus a pellentesque.',
+    'Tecnico em Eletronica e tecnologo em Analise e Desenvolvimento de Sistemas.',
+    'Experiencia profissional desde 2024 na ProHound com automacao e eficiencia energetica.',
+    'Evolucao de auxiliar de desenvolvimento para Analista Junior no segundo ano.',
+    'Repertorio em HTML, CSS, JavaScript, Angular, React, Next.js, Node-RED, n8n e Supabase.',
   ],
-  proofAsideTitle: 'Leitura acima do ruido',
+  proofAsideTitle: 'O que guia meu trabalho',
   proofAsideBody:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit amet est placerat in egestas erat imperdiet sed euismod nisi.',
-  contactEyebrow: '04 / Canal aberto',
-  contactTitle: 'Placeholder pronto para receber seus dados finais.',
+    'Gosto de construir interfaces legiveis, fluxos organizados e produtos que resolvam uma rotina de verdade. Meu interesse fica no encontro entre front-end, automacao, visualizacao e ferramentas de trabalho.',
+  contactEyebrow: '04 / Contato',
+  contactTitle: 'GitHub ativo. Contato completo em organizacao.',
   contactBody:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis risus sed vulputate odio ut enim blandit volutpat maecenas volutpat.',
+    'Enquanto organizo email e LinkedIn, o GitHub fica como ponto principal. Quando voce me passar os links finais, essa secao pode ser fechada em poucos minutos.',
 }
 
-export const disciplines = [
+export const disciplines: DisciplineGroup[] = [
   {
-    title: 'UI',
-    items: ['Lorem layout system', 'Readable cards', 'Motion restraint'],
+    title: 'Linguagens',
+    items: [
+      { label: 'HTML', kind: 'html' },
+      { label: 'CSS', kind: 'css' },
+      { label: 'JavaScript', kind: 'javascript' },
+      { label: 'Python', kind: 'python' },
+      { label: 'Java', kind: 'java' },
+      { label: 'C++', kind: 'cplusplus' },
+      { label: 'PostgreSQL', kind: 'postgresql' },
+    ],
   },
   {
-    title: 'Systems',
-    items: ['APIs and flow', 'Typed structure', 'Clean delivery'],
+    title: 'Frameworks',
+    items: [
+      { label: 'Angular', kind: 'angular' },
+      { label: 'React', kind: 'react' },
+      { label: 'Next.js', kind: 'nextjs' },
+      { label: 'Vite', kind: 'vite' },
+      { label: 'Tailwind CSS', kind: 'tailwind' },
+    ],
   },
   {
-    title: 'Delivery',
-    items: ['Vercel ready', 'Checks enabled', 'Mobile first'],
+    title: 'Automacao',
+    items: [
+      { label: 'Node-RED', kind: 'nodered' },
+      { label: 'n8n', kind: 'n8n' },
+      { label: 'Supabase', kind: 'supabase' },
+      { label: 'APIs', kind: 'api' },
+      { label: 'Integracoes', kind: 'integrations' },
+    ],
+  },
+  {
+    title: 'Ferramentas',
+    items: [
+      { label: 'Git', kind: 'git' },
+      { label: 'GitHub', kind: 'github' },
+      { label: 'Vercel', kind: 'vercel' },
+      { label: 'Tauri', kind: 'tauri' },
+      { label: 'Anime.js', kind: 'animejs' },
+      { label: 'Magic UI', kind: 'magicui' },
+      { label: 'LM Studio', kind: 'lmstudio' },
+      { label: 'Ollama', kind: 'ollama' },
+    ],
   },
 ]
 
@@ -127,64 +178,63 @@ export const rituals = [
     step: '01',
     title: 'Contexto',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.',
+      'Entendo a rotina, a dor e o tipo de organizacao que o sistema precisa sustentar.',
   },
   {
     step: '02',
     title: 'Sistema',
     description:
-      'Nunc faucibus a pellentesque sit amet porttitor eget dolor morbi.',
+      'Desenho o fluxo principal, os estados e a leitura da interface antes de expandir escopo.',
   },
   {
     step: '03',
-    title: 'Polimento',
+    title: 'Iteracao',
     description:
-      'Morbi tristique senectus et netus et malesuada fames ac turpis.',
+      'Lapido detalhes de uso, personalizacao e entrega para o produto ficar util no dia a dia.',
   },
 ]
 
 export const contactLinks = [
   {
-    label: 'Email',
-    value: 'hello@loremarchive.dev',
-    href: 'mailto:hello@loremarchive.dev',
+    label: 'GitHub',
+    value: 'github.com/nilton-isaac',
+    href: 'https://github.com/nilton-isaac',
   },
   {
-    label: 'GitHub',
-    value: 'github.com/loremarchive',
-    href: 'https://github.com/loremarchive',
+    label: 'Email',
+    value: 'em organizacao',
+    href: '#contato',
   },
   {
     label: 'LinkedIn',
-    value: 'linkedin.com/in/loremarchive',
-    href: 'https://www.linkedin.com/in/loremarchive/',
+    value: 'em organizacao',
+    href: '#contato',
   },
 ]
 
 const synthAsset = '/synth-logo-original.png'
 
-const loremLong =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam aliquam sem et tortor consequat id. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit duis.'
-
 export const manifestations: Manifestation[] = [
   {
     id: 'kanban-nine',
     index: 'I',
-    label: 'workflow system',
+    label: 'produtividade pessoal',
     title: 'Kanban Nine',
     posterTitle: 'KANBAN_NINE',
-    posterSubtitle: 'ops / flow / systems',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    posterSubtitle: 'scrum / flow / focus',
+    subtitle:
+      'Sistema pessoal de produtividade que nasceu das minhas dailies e evoluiu para um kanban gamificado e flexivel.',
     summary:
-      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'Une organizacao pessoal, personalizacao visual e uma estrutura inspirada em Scrum para transformar tarefas em rotina clara.',
     detail:
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-    overview: loremLong,
-    status: 'placeholder alpha',
-    ctaLabel: 'abrir dossier',
+      'O foco esta em facilitar planejamento, priorizacao e acompanhamento sem perder personalizacao nem leveza de uso.',
+    overview:
+      'O Kanban Nine comecou como uma necessidade simples: anotar o que eu faria no dia. A partir disso, evoluiu para uma ferramenta pessoal com estrutura de kanban, temas inspirados em jogos e recursos para tornar a organizacao mais consistente e motivadora.',
+    status: 'projeto autoral',
+    ctaLabel: 'falar sobre o projeto',
     ctaHref: '#contato',
-    stack: ['React', 'TypeScript', 'State', 'UI systems'],
-    cue: 'cyan / circuitry / terminal',
+    stack: ['Kanban', 'Scrum', 'Gamificacao', 'Produtividade'],
+    cue: 'cyan / focus / planning',
     logoMode: 'vector',
     logoKind: 'kanban-nine',
     palette: {
@@ -216,97 +266,47 @@ export const manifestations: Manifestation[] = [
       voidStrength: 0.32,
       emphasis: 'orthogonal',
     },
-    heroVisual: { src: '/mockups/kanban-hero.svg', alt: 'Kanban Nine placeholder hero' },
+    heroVisual: { src: '/mockups/kanban-hero.svg', alt: 'Kanban Nine interface conceitual' },
     gallery: [
-      { src: '/mockups/kanban-queue.svg', alt: 'Kanban Nine queue mockup' },
-      { src: '/mockups/kanban-metrics.svg', alt: 'Kanban Nine metrics mockup' },
-      { src: '/mockups/shared-terminal.svg', alt: 'Shared terminal mockup' },
+      { src: '/mockups/kanban-queue.svg', alt: 'Kanban Nine quadro principal' },
+      { src: '/mockups/kanban-metrics.svg', alt: 'Kanban Nine organizacao de prioridade' },
+      { src: '/mockups/shared-terminal.svg', alt: 'Kanban Nine compartilhamento de status' },
     ],
     detailSections: [
-      { title: 'Contexto', body: loremLong },
-      { title: 'Resultado', body: loremLong },
-      { title: 'Proximos passos', body: loremLong },
-    ],
-  },
-  {
-    id: 'icarus-type',
-    index: 'II',
-    label: 'language product',
-    title: 'Icarus Type',
-    posterTitle: 'Icarus',
-    posterSubtitle: 'Type',
-    subtitle: 'Lorem ipsum dolor sit amet, sed do eiusmod tempor.',
-    summary:
-      'Cursus mattis molestie a iaculis at erat pellentesque adipiscing commodo elit at imperdiet.',
-    detail:
-      'Habitasse platea dictumst quisque sagittis purus sit amet volutpat consequat mauris.',
-    overview: loremLong,
-    status: 'placeholder beta',
-    ctaLabel: 'ver estrutura',
-    ctaHref: '#contato',
-    stack: ['Next.js', 'Content', 'Typography', 'Editorial UI'],
-    cue: 'violet / sigil / editorial',
-    logoMode: 'vector',
-    logoKind: 'icarus-type',
-    palette: {
-      primary: '#f7ecff',
-      secondary: '#cf79ff',
-      tertiary: '#ff63d5',
-      text: '#fff9ff',
-      glow: 'rgba(207, 121, 255, 0.24)',
-      accentSoft: 'rgba(207, 121, 255, 0.16)',
-      washLeft: 'rgba(67, 20, 96, 0.26)',
-      washCenter: 'rgba(12, 7, 18, 0.84)',
-      washRight: 'rgba(255, 99, 213, 0.08)',
-      dot: 'rgba(207, 121, 255, 0.12)',
-      tileStrong: 'rgba(207, 121, 255, 0.82)',
-      tileSoft: 'rgba(207, 121, 255, 0.34)',
-      tileOutline: 'rgba(255, 99, 213, 0.22)',
-      panelGlow: 'rgba(207, 121, 255, 0.22)',
-      previewTint: 'rgba(255, 99, 213, 0.18)',
-    },
-    backgroundPattern: {
-      seed: 23,
-      density: 0.31,
-      clusterCount: 9,
-      clusterRadius: 0.18,
-      strongCutoff: 0.79,
-      softCutoff: 0.55,
-      flow: 1.14,
-      jitter: 1.44,
-      voidStrength: 0.28,
-      emphasis: 'orbital',
-    },
-    heroVisual: { src: '/mockups/icarus-hero.svg', alt: 'Icarus Type placeholder hero' },
-    gallery: [
-      { src: '/mockups/icarus-editorial.svg', alt: 'Icarus Type editorial mockup' },
-      { src: '/mockups/icarus-player.svg', alt: 'Icarus Type player mockup' },
-      { src: '/mockups/shared-terminal.svg', alt: 'Shared terminal mockup' },
-    ],
-    detailSections: [
-      { title: 'Visao', body: loremLong },
-      { title: 'Fluxo', body: loremLong },
-      { title: 'Iteracao', body: loremLong },
+      {
+        title: 'Contexto',
+        body: 'Nasceu da rotina de dailies e da necessidade de registrar o que precisava ser feito de forma mais clara e mais estimulante do que uma lista solta.',
+      },
+      {
+        title: 'Estrutura',
+        body: 'Permite personalizar colunas, organizar tarefas em cards, adicionar equipes, pessoas envolvidas, subtarefas, tags, anexos, prioridade e status.',
+      },
+      {
+        title: 'Recursos',
+        body: 'Tambem inclui matriz de Eisenhower, arquivo semanal e mensagens prontas com variaveis para compartilhar atualizacoes em grupos.',
+      },
     ],
   },
   {
     id: 'synth-wirenotion',
-    index: 'III',
-    label: 'note system',
+    index: 'II',
+    label: 'whiteboard + notes',
     title: 'Synth WireNotion',
     posterTitle: 'SYNTH',
     posterSubtitle: 'WIRENOTION',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    subtitle:
+      'Ferramenta inspirada no Excalidraw que mistura whiteboard, documentos e notas em um mesmo espaco de trabalho.',
     summary:
-      'Magna sit amet purus gravida quis blandit turpis cursus in hac habitasse platea dictumst.',
+      'O objetivo do Synth e ir alem de uma board isolada, permitindo organizar conhecimento, diagramar fluxos e trabalhar com diferentes tipos de conteudo lado a lado.',
     detail:
-      'Commodo elit at imperdiet dui accumsan sit amet nulla facilisi morbi tempus.',
-    overview: loremLong,
-    status: 'placeholder concept',
-    ctaLabel: 'abrir arquivo',
+      'Ele foi pensado para quem quer desenhar, mapear ideias, escrever e estruturar informacao sem quebrar o contexto entre canvas e documento.',
+    overview:
+      'O Synth WireNotion nasceu de uma vontade pessoal de expandir o que eu via no Excalidraw. Em vez de usar somente um whiteboard, quis montar um ambiente que juntasse diagramacao, mapas mentais, notas, graficos, tabelas e documentos em uma experiencia mais ampla.',
+    status: 'conceito em evolucao',
+    ctaLabel: 'falar sobre o projeto',
     ctaHref: '#contato',
-    stack: ['Visual graph', 'Notes', 'Brand UI', 'System docs'],
-    cue: 'teal / violet / glass',
+    stack: ['Whiteboard', 'Notas', 'Mapas mentais', 'Documentos'],
+    cue: 'teal / boards / knowledge',
     logoMode: 'image',
     logoKind: 'synth-wirenotion',
     logoAsset: synthAsset,
@@ -340,16 +340,25 @@ export const manifestations: Manifestation[] = [
       emphasis: 'diagonal',
       angle: 0.84,
     },
-    heroVisual: { src: '/mockups/synth-hero.svg', alt: 'Synth WireNotion placeholder hero' },
+    heroVisual: { src: '/mockups/synth-hero.svg', alt: 'Synth WireNotion interface conceitual' },
     gallery: [
-      { src: '/mockups/synth-graph.svg', alt: 'Synth WireNotion graph mockup' },
-      { src: '/mockups/synth-panels.svg', alt: 'Synth WireNotion panels mockup' },
-      { src: '/mockups/shared-terminal.svg', alt: 'Shared terminal mockup' },
+      { src: '/mockups/synth-graph.svg', alt: 'Synth WireNotion area de grafos e conexoes' },
+      { src: '/mockups/synth-panels.svg', alt: 'Synth WireNotion documento ao lado da board' },
+      { src: '/mockups/shared-terminal.svg', alt: 'Synth WireNotion uso com diferentes paineis' },
     ],
     detailSections: [
-      { title: 'Arquivo', body: loremLong },
-      { title: 'Estrutura', body: loremLong },
-      { title: 'Direcao', body: loremLong },
+      {
+        title: 'Inspiracao',
+        body: 'A referencia inicial foi o Excalidraw, principalmente pela liberdade de desenhar e diagramar sem friccao. O Synth nasce quando essa experiencia deixa de ser suficiente para o que eu queria organizar.',
+      },
+      {
+        title: 'Estrutura',
+        body: 'A proposta e usar documento e whiteboard lado a lado, permitindo criar fluxos, mapas mentais, notas, tabelas, graficos e outros registros sem separar a escrita da visualizacao.',
+      },
+      {
+        title: 'Direcao',
+        body: 'Mais do que uma board isolada, o projeto busca virar um espaco de trabalho visual para organizacao de conhecimento, exploracao de ideias e documentacao conectada.',
+      },
     ],
   },
 ]
