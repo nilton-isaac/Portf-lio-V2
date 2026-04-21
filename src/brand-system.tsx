@@ -18,6 +18,7 @@ export type TechLogoKind =
   | 'nextjs'
   | 'vite'
   | 'tailwind'
+  | 'gsap'
   | 'nodered'
   | 'n8n'
   | 'supabase'
@@ -146,6 +147,13 @@ const techPalettes: Record<TechLogoKind, TechPalette> = {
     tertiary: '#d2fff8',
     text: '#f2fffe',
     glow: 'rgba(68, 209, 216, 0.28)',
+  },
+  gsap: {
+    primary: '#88ff70',
+    secondary: '#d7ff72',
+    tertiary: '#efffd1',
+    text: '#f8fff3',
+    glow: 'rgba(136, 255, 112, 0.28)',
   },
   nodered: {
     primary: '#ff7a76',
@@ -565,6 +573,22 @@ function renderTechGlyph(kind: TechLogoKind, palette: TechPalette) {
             d="M22 42C25 36 29 34 34 36C37 37 38.5 40 40.5 41.5C43.5 44 47 43 50 38C47 44 43 46 38 44C35 43 33.5 40 31.5 38.5C28.5 36 25 37 22 42Z"
             fill={palette.secondary}
           />
+        </>
+      )
+    case 'gsap':
+      return (
+        <>
+          <path
+            d="M23 44C23 31 31 22 43 22C47 22 50 22.8 53 24.5L49.8 30.8C47.8 29.7 45.8 29.2 43.5 29.2C35.8 29.2 30.8 34.7 30.8 43.1C30.8 51.7 35.9 56.8 43.6 56.8C45.9 56.8 48.1 56.2 50 55L53.2 61.2C50 63.3 46.2 64.2 42 64.2C30.4 64.2 23 56.1 23 44Z"
+            fill={palette.primary}
+          />
+          <path
+            d="M38 39H52"
+            stroke={palette.secondary}
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          />
+          <circle cx="51.5" cy="39" r="3.6" fill={palette.secondary} />
         </>
       )
     case 'nodered':

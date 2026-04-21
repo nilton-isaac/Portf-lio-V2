@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { TechLogo, type TechLogoKind } from './brand-system'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -32,12 +33,62 @@ type MotionState = {
   titleBlur: number
 }
 
+type StackItem = {
+  label: string
+  kind: TechLogoKind
+  category: string
+}
+
+type BackgroundSquare = {
+  left: string
+  top: string
+  size: string
+  variant?: 'bright' | 'outline'
+}
+
 const PARTICLE_COUNT = 180
 const MAX_VELOCITY = 3.3
 const INITIAL_NAME = 'nilton-isaac'
 const FINAL_NAME = 'Isaac Rubio'
 const COOL_PARTICLE = { r: 214, g: 220, b: 228 }
 const WARM_PARTICLE = { r: 255, g: 122, b: 26 }
+const STACK_FILTERS = [
+  'Todos',
+  'Linguagens',
+  'Frameworks',
+  'Orquestracao',
+  'Ferramentas',
+]
+const STACK_ITEMS: StackItem[] = [
+  { label: 'HTML5', kind: 'html', category: 'linguagens' },
+  { label: 'CSS3', kind: 'css', category: 'linguagens' },
+  { label: 'JavaScript', kind: 'javascript', category: 'linguagens' },
+  { label: 'React', kind: 'react', category: 'frameworks' },
+  { label: 'Next.js', kind: 'nextjs', category: 'frameworks' },
+  { label: 'Tailwind', kind: 'tailwind', category: 'frameworks' },
+  { label: 'Vite', kind: 'vite', category: 'frameworks' },
+  { label: 'GSAP', kind: 'gsap', category: 'frameworks' },
+  { label: 'Java', kind: 'java', category: 'linguagens' },
+  { label: 'Python', kind: 'python', category: 'linguagens' },
+  { label: 'PostgreSQL', kind: 'postgresql', category: 'ferramentas' },
+  { label: 'Supabase', kind: 'supabase', category: 'ferramentas' },
+  { label: 'n8n', kind: 'n8n', category: 'orquestracao' },
+  { label: 'Node-RED', kind: 'nodered', category: 'orquestracao' },
+]
+const CATALOG_SQUARES: BackgroundSquare[] = [
+  { left: '8%', top: '16%', size: '54px', variant: 'outline' },
+  { left: '16%', top: '29%', size: '36px' },
+  { left: '22%', top: '60%', size: '66px' },
+  { left: '31%', top: '18%', size: '72px', variant: 'bright' },
+  { left: '39%', top: '74%', size: '42px', variant: 'outline' },
+  { left: '54%', top: '22%', size: '58px' },
+  { left: '62%', top: '61%', size: '92px', variant: 'bright' },
+  { left: '71%', top: '35%', size: '48px' },
+  { left: '79%', top: '17%', size: '34px', variant: 'outline' },
+  { left: '84%', top: '56%', size: '64px' },
+  { left: '88%', top: '73%', size: '44px', variant: 'bright' },
+  { left: '11%', top: '77%', size: '52px' },
+]
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
@@ -107,6 +158,14 @@ function App() {
   const bannerRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
   const mockupRef = useRef<HTMLDivElement>(null)
+  const catalogZoneRef = useRef<HTMLDivElement>(null)
+  const catalogSurfaceRef = useRef<HTMLDivElement>(null)
+  const catalogGlowRef = useRef<HTMLDivElement>(null)
+  const catalogSquaresRef = useRef<HTMLDivElement>(null)
+  const catalogNumberRef = useRef<HTMLDivElement>(null)
+  const catalogHeaderRef = useRef<HTMLDivElement>(null)
+  const catalogFiltersRef = useRef<HTMLDivElement>(null)
+  const catalogCardsRef = useRef<HTMLDivElement>(null)
   const progressFillRef = useRef<HTMLDivElement>(null)
   const progressLabelRef = useRef<HTMLSpanElement>(null)
   const [introComplete, setIntroComplete] = useState(false)
@@ -419,8 +478,17 @@ function App() {
     const banner = bannerRef.current
     const description = descriptionRef.current
     const mockup = mockupRef.current
+    const catalogZone = catalogZoneRef.current
+    const catalogSurface = catalogSurfaceRef.current
+    const catalogGlow = catalogGlowRef.current
+    const catalogSquaresWrap = catalogSquaresRef.current
+    const catalogNumber = catalogNumberRef.current
+    const catalogHeader = catalogHeaderRef.current
+    const catalogFilters = catalogFiltersRef.current
+    const catalogCardsWrap = catalogCardsRef.current
     const progressFill = progressFillRef.current
     const progressLabel = progressLabelRef.current
+    const canvas = canvasRef.current
 
     if (
       !story ||
@@ -428,8 +496,17 @@ function App() {
       !banner ||
       !description ||
       !mockup ||
+      !catalogZone ||
+      !catalogSurface ||
+      !catalogGlow ||
+      !catalogSquaresWrap ||
+      !catalogNumber ||
+      !catalogHeader ||
+      !catalogFilters ||
+      !catalogCardsWrap ||
       !progressFill ||
-      !progressLabel
+      !progressLabel ||
+      !canvas
     ) {
       return
     }
@@ -437,9 +514,18 @@ function App() {
     const ctx = gsap.context(() => {
       const isCompact = () => window.innerWidth < 960
       const hold = { value: 0 }
+      const squares = gsap.utils.toArray<HTMLElement>('.catalog-square')
+      const filters = gsap.utils.toArray<HTMLElement>('.catalog-filter')
+      const cards = gsap.utils.toArray<HTMLElement>('.stack-card')
 
       gsap.set(progressFill, { scaleX: 0, transformOrigin: 'left center' })
-      gsap.set(banner, { autoAlpha: 0, y: 34, scale: 0.985 })
+      gsap.set(canvas, { opacity: 1 })
+      gsap.set(banner, {
+        autoAlpha: 0,
+        y: 34,
+        scale: 0.985,
+        clipPath: 'inset(0% 0% 0% 0% round 2.2rem)',
+      })
       gsap.set(description, { autoAlpha: 0, y: 26 })
       gsap.set(mockup, {
         autoAlpha: 0,
@@ -448,10 +534,22 @@ function App() {
         scale: 0.965,
       })
       gsap.set(copy, {
+        autoAlpha: 1,
         x: 0,
         y: 0,
         scale: 1,
       })
+      gsap.set(catalogZone, { autoAlpha: 0 })
+      gsap.set(catalogSurface, { autoAlpha: 0, scale: 1.03 })
+      gsap.set(catalogGlow, { autoAlpha: 0, y: 72, scale: 0.84 })
+      gsap.set(catalogSquaresWrap, { autoAlpha: 0 })
+      gsap.set(catalogNumber, { autoAlpha: 0, y: -32 })
+      gsap.set(catalogHeader, { autoAlpha: 0, y: 42 })
+      gsap.set(catalogFilters, { autoAlpha: 0, y: 26 })
+      gsap.set(catalogCardsWrap, { autoAlpha: 0 })
+      gsap.set(squares, { autoAlpha: 0, scale: 0.72, y: 24 })
+      gsap.set(filters, { autoAlpha: 0, y: 18, scale: 0.96 })
+      gsap.set(cards, { autoAlpha: 0, y: 34, scale: 0.94 })
 
       gsap
         .timeline({
@@ -509,13 +607,186 @@ function App() {
           2.2,
         )
         .to(
+          mockup,
+          {
+            autoAlpha: 0,
+            x: () => (isCompact() ? 0 : window.innerWidth * 0.06),
+            y: () => (isCompact() ? 24 : -window.innerHeight * 0.12),
+            scale: 0.82,
+            duration: 4,
+          },
+          11,
+        )
+        .to(
+          copy,
+          {
+            x: () => (isCompact() ? -window.innerWidth * 0.12 : -window.innerWidth * 0.26),
+            y: () => (isCompact() ? -window.innerHeight * 0.08 : -window.innerHeight * 0.09),
+            scale: () => (isCompact() ? 0.88 : 0.78),
+            duration: 4,
+          },
+          11,
+        )
+        .to(
+          description,
+          {
+            autoAlpha: 0.32,
+            y: -10,
+            duration: 4,
+          },
+          11,
+        )
+        .to(
+          banner,
+          {
+            clipPath: 'inset(10% 9% 10% 9% round 2rem)',
+            scale: 0.95,
+            autoAlpha: 0.9,
+            duration: 4,
+            ease: 'power2.inOut',
+          },
+          11,
+        )
+        .set(catalogZone, { autoAlpha: 1 }, 15)
+        .to(
+          canvas,
+          {
+            opacity: 0,
+            duration: 3,
+            ease: 'power2.out',
+          },
+          15,
+        )
+        .to(
+          copy,
+          {
+            autoAlpha: 0,
+            duration: 2.6,
+            ease: 'power1.out',
+          },
+          15.1,
+        )
+        .to(
+          banner,
+          {
+            clipPath: 'inset(47% 47% 47% 47% round 999px)',
+            scale: 0.72,
+            autoAlpha: 0,
+            duration: 3,
+            ease: 'power3.inOut',
+          },
+          15,
+        )
+        .to(
+          catalogSurface,
+          {
+            autoAlpha: 1,
+            scale: 1,
+            duration: 4,
+          },
+          18,
+        )
+        .to(
+          catalogGlow,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 4,
+            ease: 'power3.out',
+          },
+          18.15,
+        )
+        .to(
+          catalogSquaresWrap,
+          {
+            autoAlpha: 1,
+            duration: 0.3,
+          },
+          18.2,
+        )
+        .to(
+          catalogNumber,
+          {
+            autoAlpha: 0.6,
+            y: 0,
+            duration: 2.8,
+          },
+          19.1,
+        )
+        .to(
+          squares,
+          {
+            autoAlpha: (_, target) =>
+              (target as HTMLElement).classList.contains('is-bright')
+                ? 0.38
+                : (target as HTMLElement).classList.contains('is-outline')
+                  ? 0.22
+                  : 0.28,
+            y: 0,
+            scale: 1,
+            duration: 2.4,
+            stagger: 0.08,
+            ease: 'power3.out',
+          },
+          18.45,
+        )
+        .to(
+          catalogHeader,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.6,
+          },
+          22,
+        )
+        .to(
+          catalogFilters,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1,
+          },
+          22.25,
+        )
+        .to(
+          filters,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            stagger: 0.08,
+          },
+          22.35,
+        )
+        .to(
+          catalogCardsWrap,
+          {
+            autoAlpha: 1,
+            duration: 0.25,
+          },
+          22.9,
+        )
+        .to(
+          cards,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 1.5,
+            stagger: 0.07,
+          },
+          23.05,
+        )
+        .to(
           hold,
           {
             value: 1,
-            duration: 90,
+            duration: 75,
             ease: 'none',
           },
-          10,
+          25,
         )
 
       ScrollTrigger.refresh()
@@ -548,9 +819,9 @@ function App() {
           <div ref={copyRef} className="hero-copy">
             <h1 ref={titleRef} className="stage-title" />
             <p ref={descriptionRef} className="hero-description">
-              Sou analista de desenvolvimento júnior e transformo interfaces em
-              experiências que podem nascer minimalistas e escalar para produtos
-              robustos, funcionais e cheios de intenção.
+              Sou analista de desenvolvimento junior e crio experiencias que
+              podem nascer minimalistas e escalar para produtos robustos,
+              funcionais e cheios de intencao.
             </p>
           </div>
 
@@ -567,6 +838,66 @@ function App() {
 
             <div className="hero-mockup__viewport" />
           </div>
+
+          <section ref={catalogZoneRef} className="catalog-zone" aria-label="Tech stack">
+            <div ref={catalogSurfaceRef} className="catalog-surface" />
+            <div ref={catalogGlowRef} className="catalog-glow" />
+
+            <div ref={catalogSquaresRef} className="catalog-squares" aria-hidden="true">
+              {CATALOG_SQUARES.map((square, index) => (
+                <span
+                  key={`${square.left}-${square.top}-${index}`}
+                  className={`catalog-square${square.variant ? ` is-${square.variant}` : ''}`}
+                  style={{
+                    left: square.left,
+                    top: square.top,
+                    width: square.size,
+                    height: square.size,
+                  }}
+                />
+              ))}
+            </div>
+
+            <div ref={catalogNumberRef} className="catalog-number" aria-hidden="true">
+              02
+            </div>
+
+            <div ref={catalogHeaderRef} className="catalog-header">
+              <p className="catalog-header__kicker">Tech Stack</p>
+              <h2 className="catalog-header__title">
+                Tecnologias que sustentam a parte mais tecnica do meu trabalho.
+              </h2>
+              <p className="catalog-header__body">
+                Linguagens, frameworks, dados e fluxos que eu ja usei para
+                construir interfaces, automacoes e produtos com cara de produto
+                de verdade.
+              </p>
+            </div>
+
+            <div ref={catalogFiltersRef} className="catalog-filters" aria-hidden="true">
+              {STACK_FILTERS.map((filter, index) => (
+                <span
+                  key={filter}
+                  className={`catalog-filter${index === 0 ? ' is-active' : ''}`}
+                >
+                  {filter}
+                </span>
+              ))}
+            </div>
+
+            <div ref={catalogCardsRef} className="catalog-grid">
+              {STACK_ITEMS.map((item) => (
+                <article
+                  key={item.label}
+                  className="stack-card"
+                  data-category={item.category}
+                >
+                  <TechLogo kind={item.kind} className="stack-card__logo" />
+                  <p className="stack-card__label">{item.label}</p>
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
     </main>

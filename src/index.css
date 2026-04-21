@@ -40,6 +40,7 @@ body {
 }
 
 h1,
+h2,
 p {
   margin: 0;
 }
@@ -135,7 +136,9 @@ p {
     0 30px 80px rgba(0, 0, 0, 0.32),
     0 0 80px rgba(255, 122, 26, 0.06);
   backdrop-filter: blur(22px);
+  clip-path: inset(0 round clamp(1.6rem, 3vw, 2.4rem));
   opacity: 0;
+  will-change: opacity, transform, clip-path;
 }
 
 .hero-banner::before {
@@ -218,6 +221,7 @@ p {
   overflow: hidden;
   opacity: 0;
   transform: translateY(-50%);
+  will-change: opacity, transform;
 }
 
 .hero-mockup__topbar {
@@ -275,6 +279,228 @@ p {
   border-radius: 1rem;
 }
 
+.catalog-zone {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  padding: clamp(5rem, 9vh, 6.5rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 4vh, 3rem);
+  opacity: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.catalog-surface {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 100%, rgba(82, 114, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 18% 18%, rgba(110, 138, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, #090b14 0%, #06070d 58%, #040405 100%);
+  opacity: 0;
+}
+
+.catalog-surface::before,
+.catalog-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.catalog-surface::before {
+  background:
+    linear-gradient(rgba(118, 142, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(118, 142, 255, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.9), transparent 96%);
+  opacity: 0.34;
+}
+
+.catalog-surface::after {
+  background:
+    radial-gradient(circle at 50% 105%, rgba(107, 131, 255, 0.24), transparent 28%),
+    linear-gradient(180deg, rgba(3, 4, 7, 0.08), rgba(3, 4, 7, 0.64));
+}
+
+.catalog-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -18vh;
+  z-index: 1;
+  width: min(92rem, 140vw);
+  height: min(46rem, 62vh);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(99, 124, 255, 0.36) 0%,
+    rgba(67, 90, 205, 0.2) 26%,
+    rgba(14, 18, 33, 0) 72%
+  );
+  transform: translateX(-50%);
+  filter: blur(20px);
+  opacity: 0;
+}
+
+.catalog-squares {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.catalog-square {
+  position: absolute;
+  border: 1px solid rgba(129, 149, 255, 0.14);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.018)),
+    rgba(15, 20, 44, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 42px rgba(85, 113, 255, 0.08);
+  backdrop-filter: blur(18px);
+  filter: blur(6px);
+  opacity: 0;
+}
+
+.catalog-square.is-bright {
+  background:
+    linear-gradient(180deg, rgba(161, 181, 255, 0.14), rgba(255, 255, 255, 0.015)),
+    rgba(29, 40, 84, 0.44);
+  border-color: rgba(148, 168, 255, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 56px rgba(98, 124, 255, 0.18);
+  filter: blur(10px);
+}
+
+.catalog-square.is-outline {
+  background: transparent;
+  border-style: dashed;
+  filter: blur(3px);
+}
+
+.catalog-number,
+.catalog-header,
+.catalog-filters,
+.catalog-grid {
+  position: relative;
+  z-index: 2;
+}
+
+.catalog-number {
+  position: absolute;
+  top: clamp(1.4rem, 2vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  font-size: clamp(5rem, 16vw, 12rem);
+  line-height: 0.82;
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  color: rgba(245, 248, 255, 0.045);
+  opacity: 0;
+}
+
+.catalog-header {
+  width: min(58rem, 100%);
+  text-align: center;
+}
+
+.catalog-header__kicker {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(189, 202, 255, 0.8);
+}
+
+.catalog-header__title {
+  max-width: 14ch;
+  margin: 0.95rem auto 0;
+  font-size: clamp(2.8rem, 6vw, 5.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+}
+
+.catalog-header__body {
+  max-width: 44rem;
+  margin: 1.15rem auto 0;
+  color: rgba(225, 232, 255, 0.7);
+  font-size: clamp(1rem, 1.35vw, 1.08rem);
+  line-height: 1.8;
+}
+
+.catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.catalog-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(137, 152, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(10, 12, 22, 0.68);
+  color: rgba(218, 225, 255, 0.72);
+  font-size: 0.92rem;
+  line-height: 1;
+  backdrop-filter: blur(16px);
+}
+
+.catalog-filter.is-active {
+  border-color: rgba(180, 165, 255, 0.34);
+  background: linear-gradient(135deg, rgba(124, 77, 255, 0.94), rgba(90, 108, 255, 0.9));
+  color: #ffffff;
+  box-shadow: 0 0 38px rgba(102, 92, 255, 0.24);
+}
+
+.catalog-grid {
+  width: min(1170px, 100%);
+  margin-top: clamp(2.2rem, 5vh, 3.4rem);
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stack-card {
+  aspect-ratio: 1;
+  min-height: 9.8rem;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.8rem;
+  padding: 1rem 0.8rem;
+  border: 1px solid rgba(124, 137, 217, 0.16);
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+    rgba(8, 9, 16, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 20px 44px rgba(0, 0, 0, 0.22),
+    0 0 40px rgba(82, 101, 225, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.stack-card__logo {
+  width: clamp(3.6rem, 5vw, 4.4rem);
+  height: clamp(3.6rem, 5vw, 4.4rem);
+}
+
+.stack-card__label {
+  color: rgba(234, 239, 255, 0.78);
+  font-size: 0.94rem;
+  font-weight: 500;
+  text-align: center;
+}
+
 @keyframes caret-blink {
   0%,
   48% {
@@ -299,6 +525,40 @@ p {
 
   .hero-copy {
     width: min(34rem, calc(100vw - 2.4rem));
+  }
+
+  .catalog-zone {
+    padding-top: 5.8rem;
+  }
+
+  .catalog-number {
+    display: none;
+  }
+
+  .catalog-header__title {
+    max-width: 12ch;
+  }
+
+  .catalog-header__body {
+    max-width: 34rem;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .stack-card {
+    min-height: 7.6rem;
+  }
+
+  .stack-card__logo {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+
+  .stack-card__label {
+    font-size: 0.84rem;
   }
 
   .hero-mockup {
@@ -332,6 +592,50 @@ p {
 
   .hero-mockup {
     height: min(34vh, 300px);
+  }
+
+  .catalog-zone {
+    padding: 5rem 0.9rem 1.4rem;
+  }
+
+  .catalog-header__title {
+    max-width: 9ch;
+  }
+
+  .catalog-header__body {
+    font-size: 0.92rem;
+    line-height: 1.64;
+  }
+
+  .catalog-filters {
+    gap: 0.6rem;
+    margin-top: 1.6rem;
+  }
+
+  .catalog-filter {
+    min-height: 2.45rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.86rem;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .stack-card {
+    min-height: 6.8rem;
+    gap: 0.55rem;
+    padding: 0.75rem 0.55rem;
+  }
+
+  .stack-card__logo {
+    width: 2.9rem;
+    height: 2.9rem;
+  }
+
+  .stack-card__label {
+    font-size: 0.78rem;
   }
 }
 
