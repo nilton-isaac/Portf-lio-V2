@@ -3,7 +3,10 @@
 
 :root {
   --bg: #050505;
+  --panel: rgba(26, 26, 27, 0.82);
+  --panel-line: rgba(255, 255, 255, 0.08);
   --text: #f6efe7;
+  --muted: rgba(246, 239, 231, 0.72);
   --orange: #ff7a1a;
   --orange-glow: rgba(255, 122, 26, 0.38);
   font-synthesis: none;
@@ -20,18 +23,24 @@ html,
 body,
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   margin: 0;
-  overflow: hidden;
   background: var(--bg);
+}
+
+html.scroll-locked,
+body.scroll-locked {
+  overflow: hidden;
 }
 
 body {
   color: var(--text);
   font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
 }
 
-h1 {
+h1,
+p {
   margin: 0;
 }
 
@@ -40,33 +49,124 @@ h1 {
   color: #fff7f0;
 }
 
-.stage-shell {
+.experience-shell {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  background: #050505;
+  min-height: 320vh;
+  background: transparent;
 }
 
 .stage-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.stage-overlay {
+.story-shell {
+  position: relative;
+  z-index: 2;
+  min-height: 320vh;
+}
+
+.story-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: clamp(1rem, 2vw, 1.6rem);
+  left: 50%;
+  z-index: 14;
+  display: grid;
+  gap: 0.45rem;
+  width: min(460px, calc(100vw - 2rem));
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.scroll-progress.is-visible {
+  opacity: 1;
+}
+
+.scroll-progress__label {
+  color: rgba(255, 255, 255, 0.62);
+  text-align: right;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.scroll-progress__track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.scroll-progress__fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(255, 122, 26, 0.3), #ff7a1a, #ffb06a);
+  transform: scaleX(0);
+  transform-origin: left center;
+  box-shadow: 0 0 20px rgba(255, 122, 26, 0.4);
+}
+
+.hero-banner {
+  position: absolute;
+  inset: clamp(4rem, 8vh, 6rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 4vh, 3rem);
+  border: 1px solid var(--panel-line);
+  border-radius: clamp(1.6rem, 3vw, 2.4rem);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    var(--panel);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 30px 80px rgba(0, 0, 0, 0.32),
+    0 0 80px rgba(255, 122, 26, 0.06);
+  backdrop-filter: blur(22px);
+  opacity: 0;
+}
+
+.hero-banner::before {
+  content: '';
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 16% 24%, rgba(255, 255, 255, 0.04), transparent 22%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.018) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.014) 50%, rgba(255, 255, 255, 0.014) 75%, transparent 75%, transparent);
+  background-size:
+    auto,
+    14px 14px;
+  border-radius: inherit;
+  opacity: 0.7;
   pointer-events: none;
+}
+
+.hero-copy {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+  width: min(42rem, calc(100vw - 2.8rem));
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
 }
 
 .stage-title {
   min-height: 1.08em;
-  max-width: 92vw;
-  text-align: center;
-  font-size: clamp(2.8rem, 8.5vw, 7.8rem);
+  max-width: 100%;
+  font-size: clamp(2.9rem, 8vw, 7.8rem);
   line-height: 0.92;
   letter-spacing: -0.08em;
   color: var(--text);
@@ -91,6 +191,90 @@ h1 {
   animation: caret-blink 1s steps(1) infinite;
 }
 
+.hero-description {
+  max-width: 32rem;
+  margin-top: 1.3rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.78;
+  opacity: 0;
+}
+
+.hero-mockup {
+  position: absolute;
+  right: clamp(1.4rem, 4vw, 3rem);
+  top: 50%;
+  z-index: 5;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: min(46vw, 760px);
+  height: min(62vh, 560px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: clamp(1.3rem, 2vw, 1.8rem);
+  background: rgba(11, 11, 14, 0.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 30px 80px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-50%);
+}
+
+.hero-mockup__topbar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hero-mockup__lights {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.hero-mockup__lights span {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+}
+
+.hero-mockup__lights span:nth-child(1) {
+  background: #ff5f57;
+}
+
+.hero-mockup__lights span:nth-child(2) {
+  background: #febc2e;
+}
+
+.hero-mockup__lights span:nth-child(3) {
+  background: #28c840;
+}
+
+.hero-mockup__address {
+  height: 0.95rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hero-mockup__viewport {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 18%),
+    radial-gradient(circle at 24% 28%, rgba(255, 122, 26, 0.08), transparent 26%),
+    #09090c;
+}
+
+.hero-mockup__viewport::before {
+  content: '';
+  position: absolute;
+  inset: 1rem;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+}
+
 @keyframes caret-blink {
   0%,
   48% {
@@ -103,19 +287,61 @@ h1 {
   }
 }
 
+@media (max-width: 959px) {
+  .experience-shell,
+  .story-shell {
+    min-height: 340vh;
+  }
+
+  .hero-banner {
+    inset: 5.8rem 0.8rem 1.1rem;
+  }
+
+  .hero-copy {
+    width: min(34rem, calc(100vw - 2.4rem));
+  }
+
+  .hero-mockup {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: clamp(1.8rem, 5vh, 2.8rem);
+    width: min(92vw, 680px);
+    height: min(38vh, 340px);
+    transform: translateX(-50%);
+  }
+}
+
 @media (max-width: 640px) {
-  .stage-overlay {
-    padding: 1rem;
+  .scroll-progress {
+    width: calc(100vw - 1.4rem);
+    top: 0.9rem;
+  }
+
+  .hero-copy {
+    width: calc(100vw - 2rem);
   }
 
   .stage-title {
-    font-size: clamp(2.4rem, 12vw, 4.6rem);
+    font-size: clamp(2.5rem, 12vw, 4.8rem);
+  }
+
+  .hero-description {
+    font-size: 0.96rem;
+  }
+
+  .hero-mockup {
+    height: min(34vh, 300px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .scroll-progress,
+  .hero-banner,
+  .hero-description,
+  .hero-mockup,
   .stage-title {
-    opacity: 1;
+    transition: none;
   }
 
   .stage-title::after {

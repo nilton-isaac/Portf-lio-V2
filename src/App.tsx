@@ -1,5 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 type Particle = {
   startXNorm: number
@@ -99,6 +102,24 @@ function getDisplayName(state: MotionState) {
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
+  const storyRef = useRef<HTMLElement>(null)
+  const copyRef = useRef<HTMLDivElement>(null)
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const descriptionRef = useRef<HTMLParagraphElement>(null)
+  const mockupRef = useRef<HTMLDivElement>(null)
+  const progressFillRef = useRef<HTMLDivElement>(null)
+  const progressLabelRef = useRef<HTMLSpanElement>(null)
+  const [introComplete, setIntroComplete] = useState(false)
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('scroll-locked', !introComplete)
+    document.body.classList.toggle('scroll-locked', !introComplete)
+
+    return () => {
+      document.documentElement.classList.remove('scroll-locked')
+      document.body.classList.remove('scroll-locked')
+    }
+  }, [introComplete])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -246,8 +267,14 @@ function App() {
     resize()
     window.addEventListener('resize', resize)
 
-    if (!reduceMotion) {
-      introTimeline = gsap.timeline()
+    if (reduceMotion) {
+      setIntroComplete(true)
+    } else {
+      introTimeline = gsap.timeline({
+        onComplete: () => {
+          setIntroComplete(true)
+        },
+      })
 
       introTimeline
         .to(motion, {
@@ -382,12 +409,166 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!introComplete) {
+      return
+    }
+
+    const story = storyRef.current
+    const copy = copyRef.current
+    const banner = bannerRef.current
+    const description = descriptionRef.current
+    const mockup = mockupRef.current
+    const progressFill = progressFillRef.current
+    const progressLabel = progressLabelRef.current
+
+    if (
+      !story ||
+      !copy ||
+      !banner ||
+      !description ||
+      !mockup ||
+      !progressFill ||
+      !progressLabel
+    ) {
+      return
+    }
+
+    const ctx = gsap.context(() => {
+      const isCompact = () => window.innerWidth < 960
+      const hold = { value: 0 }
+
+      gsap.set(progressFill, { scaleX: 0, transformOrigin: 'left center' })
+      gsap.set(banner, { autoAlpha: 0, y: 34, scale: 0.985 })
+      gsap.set(description, { autoAlpha: 0, y: 26 })
+      gsap.set(mockup, {
+        autoAlpha: 0,
+        x: () => (isCompact() ? 0 : 76),
+        y: () => (isCompact() ? 36 : 18),
+        scale: 0.965,
+      })
+      gsap.set(copy, {
+        x: 0,
+        y: 0,
+        scale: 1,
+      })
+
+      gsap
+        .timeline({
+          defaults: { ease: 'power2.out' },
+          scrollTrigger: {
+            trigger: story,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1.1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              progressFill.style.transform = `scaleX(${self.progress})`
+              progressLabel.textContent = `${Math.round(self.progress * 100)}%`
+            },
+          },
+        })
+        .to(
+          banner,
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 10,
+          },
+          0,
+        )
+        .to(
+          copy,
+          {
+            x: () => (isCompact() ? -window.innerWidth * 0.06 : -window.innerWidth * 0.22),
+            y: () => (isCompact() ? -window.innerHeight * 0.06 : -window.innerHeight * 0.05),
+            scale: () => (isCompact() ? 0.92 : 0.82),
+            duration: 10,
+          },
+          0,
+        )
+        .to(
+          description,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 7,
+          },
+          1.8,
+        )
+        .to(
+          mockup,
+          {
+            autoAlpha: 1,
+            x: 0,
+            y: () => (isCompact() ? 0 : -window.innerHeight * 0.05),
+            scale: 1,
+            duration: 8,
+          },
+          2.2,
+        )
+        .to(
+          hold,
+          {
+            value: 1,
+            duration: 90,
+            ease: 'none',
+          },
+          10,
+        )
+
+      ScrollTrigger.refresh()
+    }, story)
+
+    return () => {
+      progressFill.style.transform = 'scaleX(0)'
+      progressLabel.textContent = '0%'
+      ctx.revert()
+    }
+  }, [introComplete])
+
   return (
-    <main className="stage-shell" aria-label="Portfolio opening">
+    <main className="experience-shell" aria-label="Portfolio opening and cover">
       <canvas ref={canvasRef} className="stage-canvas" />
-      <div className="stage-overlay">
-        <h1 ref={titleRef} className="stage-title" />
-      </div>
+
+      <section ref={storyRef} className="story-shell">
+        <div className={`scroll-progress${introComplete ? ' is-visible' : ''}`}>
+          <span ref={progressLabelRef} className="scroll-progress__label">
+            0%
+          </span>
+          <div className="scroll-progress__track">
+            <div ref={progressFillRef} className="scroll-progress__fill" />
+          </div>
+        </div>
+
+        <div className="story-stage">
+          <div ref={bannerRef} className="hero-banner" />
+
+          <div ref={copyRef} className="hero-copy">
+            <h1 ref={titleRef} className="stage-title" />
+            <p ref={descriptionRef} className="hero-description">
+              Sou analista de desenvolvimento júnior e transformo interfaces em
+              experiências que podem nascer minimalistas e escalar para produtos
+              robustos, funcionais e cheios de intenção.
+            </p>
+          </div>
+
+          <div ref={mockupRef} className="hero-mockup" aria-hidden="true">
+            <div className="hero-mockup__topbar">
+              <div className="hero-mockup__lights">
+                <span />
+                <span />
+                <span />
+              </div>
+
+              <div className="hero-mockup__address" />
+            </div>
+
+            <div className="hero-mockup__viewport" />
+          </div>
+        </div>
+      </section>
     </main>
   )
 }
