@@ -48,6 +48,8 @@ type BackgroundSquare = {
 
 const PARTICLE_COUNT = 180
 const MAX_VELOCITY = 3.3
+const INTRO_DURATION_SECONDS = 5
+const HERO_BANNER_STRIPES = 4
 const INITIAL_NAME = 'nilton-isaac'
 const FINAL_NAME = 'Isaac Rubio'
 const COOL_PARTICLE = { r: 214, g: 220, b: 228 }
@@ -330,6 +332,7 @@ function App() {
       setIntroComplete(true)
     } else {
       introTimeline = gsap.timeline({
+        paused: true,
         onComplete: () => {
           setIntroComplete(true)
         },
@@ -337,23 +340,23 @@ function App() {
 
       introTimeline
         .to(motion, {
-          duration: 2,
+          duration: 1.2,
           ease: 'none',
         })
         .to(motion, {
-          duration: 2,
+          duration: 1.1,
           velocity: 1.24,
           ease: 'power4.in',
         })
         .to(motion, {
-          duration: 1,
+          duration: 0.65,
           velocity: 2.48,
           orangeMix: 0.42,
           glow: 0.24,
           ease: 'power2.in',
         })
         .to(motion, {
-          duration: 1,
+          duration: 0.55,
           velocity: MAX_VELOCITY,
           orangeMix: 1,
           glow: 1,
@@ -457,6 +460,9 @@ function App() {
           },
           'deceleration+=3.24',
         )
+
+      introTimeline.timeScale(introTimeline.duration() / INTRO_DURATION_SECONDS)
+      introTimeline.play()
     }
 
     frameId = window.requestAnimationFrame(render)
@@ -472,6 +478,13 @@ function App() {
     if (!introComplete) {
       return
     }
+
+    // REGRAS DA ABERTURA. NAO QUEBRAR.
+    // 1. A animacao com scroll so existe DEPOIS que a intro termina.
+    // 2. Nada do container preto pode aparecer durante a intro.
+    // 3. O nome termina a intro centralizado.
+    // 4. O nome so comeca a ir para a esquerda quando o usuario realmente inicia o scroll.
+    // 5. Se alguem mexer nisso, preservar essa ordem antes de ajustar timing ou layout.
 
     const story = storyRef.current
     const copy = copyRef.current
@@ -514,6 +527,28 @@ function App() {
     const ctx = gsap.context(() => {
       const isCompact = () => window.innerWidth < 960
       const hold = { value: 0 }
+      const nameDriftDuration = 9.5
+      const bannerBuildStart = 5.8
+      const bannerStripeDuration = 1.55
+      const bannerStripeStagger = 0.78
+      const descriptionRevealStart = bannerBuildStart + 2.1
+      const mockupRiseStart = 14
+      const mockupRiseDuration = 5.4
+      const firstSceneRest = 6.2
+      const firstSceneComplete = mockupRiseStart + mockupRiseDuration
+      const secondSceneStart = firstSceneComplete + firstSceneRest
+      const secondSceneCopyStart = secondSceneStart
+      const secondSceneDescriptionStart = secondSceneStart + 0.55
+      const secondSceneMockupStart = secondSceneStart + 1.1
+      const secondSceneContainerStart = secondSceneStart + 1.8
+      const catalogSceneStart = secondSceneStart + 9.2
+      const catalogCanvasFadeStart = catalogSceneStart + 0.4
+      const catalogSurfaceStart = catalogSceneStart + 3.6
+      const catalogHeaderStart = catalogSurfaceStart + 4.1
+      const cardsRevealStart = catalogHeaderStart + 1.05
+      const finalScrollHoldStart = cardsRevealStart + 1.95
+      const finalScrollHold = 68
+      const bannerStripes = gsap.utils.toArray<HTMLElement>('.hero-banner__stripe')
       const squares = gsap.utils.toArray<HTMLElement>('.catalog-square')
       const filters = gsap.utils.toArray<HTMLElement>('.catalog-filter')
       const cards = gsap.utils.toArray<HTMLElement>('.stack-card')
@@ -522,16 +557,20 @@ function App() {
       gsap.set(canvas, { opacity: 1 })
       gsap.set(banner, {
         autoAlpha: 0,
-        y: 34,
-        scale: 0.985,
+        y: 0,
+        scale: 1,
         clipPath: 'inset(0% 0% 0% 0% round 2.2rem)',
+      })
+      gsap.set(bannerStripes, {
+        scaleX: 0,
+        transformOrigin: 'left center',
       })
       gsap.set(description, { autoAlpha: 0, y: 26 })
       gsap.set(mockup, {
         autoAlpha: 0,
-        x: () => (isCompact() ? 0 : 76),
-        y: () => (isCompact() ? 36 : 18),
-        scale: 0.965,
+        x: 0,
+        y: () => (isCompact() ? 72 : 88),
+        scale: 0.95,
       })
       gsap.set(copy, {
         autoAlpha: 1,
@@ -558,7 +597,7 @@ function App() {
             trigger: story,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 1.1,
+            scrub: 1.7,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               progressFill.style.transform = `scaleX(${self.progress})`
@@ -570,19 +609,29 @@ function App() {
           banner,
           {
             autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: 10,
+            duration: 0.01,
+            ease: 'none',
           },
-          0,
+          bannerBuildStart,
+        )
+        .to(
+          bannerStripes,
+          {
+            scaleX: 1,
+            duration: bannerStripeDuration,
+            stagger: bannerStripeStagger,
+            ease: 'power2.out',
+          },
+          bannerBuildStart,
         )
         .to(
           copy,
           {
-            x: () => (isCompact() ? -window.innerWidth * 0.06 : -window.innerWidth * 0.22),
-            y: () => (isCompact() ? -window.innerHeight * 0.06 : -window.innerHeight * 0.05),
-            scale: () => (isCompact() ? 0.92 : 0.82),
-            duration: 10,
+            x: () => (isCompact() ? -window.innerWidth * 0.12 : -window.innerWidth * 0.24),
+            y: () => (isCompact() ? window.innerHeight * 0.06 : window.innerHeight * 0.11),
+            scale: () => (isCompact() ? 0.94 : 0.84),
+            duration: nameDriftDuration,
+            ease: 'power2.inOut',
           },
           0,
         )
@@ -591,9 +640,10 @@ function App() {
           {
             autoAlpha: 1,
             y: 0,
-            duration: 7,
+            duration: 2.8,
+            ease: 'power2.out',
           },
-          1.8,
+          descriptionRevealStart,
         )
         .to(
           mockup,
@@ -602,80 +652,86 @@ function App() {
             x: 0,
             y: () => (isCompact() ? 0 : -window.innerHeight * 0.05),
             scale: 1,
-            duration: 8,
+            duration: mockupRiseDuration,
+            ease: 'power3.out',
           },
-          2.2,
+          mockupRiseStart,
         )
         .to(
           mockup,
           {
             autoAlpha: 0,
             x: () => (isCompact() ? 0 : window.innerWidth * 0.06),
-            y: () => (isCompact() ? 24 : -window.innerHeight * 0.12),
-            scale: 0.82,
-            duration: 4,
+            y: () => (isCompact() ? 26 : -window.innerHeight * 0.14),
+            scale: 0.8,
+            duration: 4.4,
+            ease: 'power3.inOut',
           },
-          11,
+          secondSceneMockupStart,
         )
         .to(
           copy,
           {
-            x: () => (isCompact() ? -window.innerWidth * 0.12 : -window.innerWidth * 0.26),
-            y: () => (isCompact() ? -window.innerHeight * 0.08 : -window.innerHeight * 0.09),
-            scale: () => (isCompact() ? 0.88 : 0.78),
-            duration: 4,
+            x: () => (isCompact() ? -window.innerWidth * 0.16 : -window.innerWidth * 0.31),
+            y: () => (isCompact() ? window.innerHeight * 0.01 : -window.innerHeight * 0.02),
+            scale: () => (isCompact() ? 0.875 : 0.765),
+            duration: 4.8,
+            ease: 'power3.inOut',
           },
-          11,
+          secondSceneCopyStart,
         )
         .to(
           description,
           {
-            autoAlpha: 0.32,
-            y: -10,
+            autoAlpha: 0.24,
+            y: -16,
             duration: 4,
+            ease: 'sine.inOut',
           },
-          11,
+          secondSceneDescriptionStart,
         )
         .to(
           banner,
           {
-            clipPath: 'inset(10% 9% 10% 9% round 2rem)',
-            scale: 0.95,
-            autoAlpha: 0.9,
-            duration: 4,
-            ease: 'power2.inOut',
+            clipPath: 'inset(12% 10% 12% 10% round 2rem)',
+            scale: 0.935,
+            autoAlpha: 0.88,
+            duration: 4.8,
+            ease: 'expo.inOut',
           },
-          11,
+          secondSceneContainerStart,
         )
-        .set(catalogZone, { autoAlpha: 1 }, 15)
+        .set(catalogZone, { autoAlpha: 1 }, catalogSceneStart)
         .to(
           canvas,
           {
             opacity: 0,
-            duration: 3,
-            ease: 'power2.out',
+            duration: 3.8,
+            ease: 'sine.inOut',
           },
-          15,
+          catalogCanvasFadeStart,
         )
         .to(
           copy,
           {
             autoAlpha: 0,
-            duration: 2.6,
-            ease: 'power1.out',
+            x: () => (isCompact() ? -window.innerWidth * 0.16 : -window.innerWidth * 0.34),
+            y: () => (isCompact() ? -window.innerHeight * 0.06 : -window.innerHeight * 0.12),
+            duration: 3.4,
+            ease: 'power2.inOut',
           },
-          15.1,
+          catalogSceneStart + 0.15,
         )
         .to(
           banner,
           {
             clipPath: 'inset(47% 47% 47% 47% round 999px)',
-            scale: 0.72,
+            scale: 0.68,
             autoAlpha: 0,
-            duration: 3,
-            ease: 'power3.inOut',
+            duration: 4.1,
+            ease: 'expo.inOut',
           },
-          15,
+          catalogSceneStart,
         )
         .to(
           catalogSurface,
@@ -684,7 +740,7 @@ function App() {
             scale: 1,
             duration: 4,
           },
-          18,
+          catalogSurfaceStart,
         )
         .to(
           catalogGlow,
@@ -695,7 +751,7 @@ function App() {
             duration: 4,
             ease: 'power3.out',
           },
-          18.15,
+          catalogSurfaceStart + 0.15,
         )
         .to(
           catalogSquaresWrap,
@@ -703,7 +759,7 @@ function App() {
             autoAlpha: 1,
             duration: 0.3,
           },
-          18.2,
+          catalogSurfaceStart + 0.2,
         )
         .to(
           catalogNumber,
@@ -712,7 +768,7 @@ function App() {
             y: 0,
             duration: 2.8,
           },
-          19.1,
+          catalogSurfaceStart + 1.1,
         )
         .to(
           squares,
@@ -729,7 +785,7 @@ function App() {
             stagger: 0.08,
             ease: 'power3.out',
           },
-          18.45,
+          catalogSurfaceStart + 0.45,
         )
         .to(
           catalogHeader,
@@ -738,7 +794,7 @@ function App() {
             y: 0,
             duration: 1.6,
           },
-          22,
+          catalogHeaderStart,
         )
         .to(
           catalogFilters,
@@ -747,7 +803,7 @@ function App() {
             y: 0,
             duration: 1,
           },
-          22.25,
+          catalogHeaderStart + 0.25,
         )
         .to(
           filters,
@@ -758,7 +814,7 @@ function App() {
             duration: 1,
             stagger: 0.08,
           },
-          22.35,
+          catalogHeaderStart + 0.35,
         )
         .to(
           catalogCardsWrap,
@@ -766,7 +822,7 @@ function App() {
             autoAlpha: 1,
             duration: 0.25,
           },
-          22.9,
+          catalogHeaderStart + 0.9,
         )
         .to(
           cards,
@@ -777,16 +833,16 @@ function App() {
             duration: 1.5,
             stagger: 0.07,
           },
-          23.05,
+          cardsRevealStart,
         )
         .to(
           hold,
           {
             value: 1,
-            duration: 75,
+            duration: finalScrollHold,
             ease: 'none',
           },
-          25,
+          finalScrollHoldStart,
         )
 
       ScrollTrigger.refresh()
@@ -814,7 +870,11 @@ function App() {
         </div>
 
         <div className="story-stage">
-          <div ref={bannerRef} className="hero-banner" />
+          <div ref={bannerRef} className="hero-banner" aria-hidden="true">
+            {Array.from({ length: HERO_BANNER_STRIPES }).map((_, index) => (
+              <span key={index} className="hero-banner__stripe" />
+            ))}
+          </div>
 
           <div ref={copyRef} className="hero-copy">
             <h1 ref={titleRef} className="stage-title" />
